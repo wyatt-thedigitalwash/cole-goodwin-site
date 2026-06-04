@@ -1,35 +1,846 @@
 @import "tailwindcss";
 
+/* ── Brand Tokens ─────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-brown: #493629;
+  --color-cream: #F9F0E3;
+  --color-rust:  #B5502A;
+
+  --font-headline: Impact, 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
+  --font-body: 'Eurostile', 'Eurostile LT Std', Arial, sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-brown: var(--color-brown);
+  --color-cream: var(--color-cream);
+  --color-rust:  var(--color-rust);
+  --font-headline: var(--font-headline);
+  --font-body: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Base ─────────────────────────────────────────────── */
+body {
+  background-color: var(--color-brown);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}
+
+/* ── Headline scale (130% horizontal per label kit) ──── */
+.font-headline {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  text-transform: uppercase;
+  transform: scaleX(1.3);
+  transform-origin: left center;
+}
+
+/* ── Type scale ───────────────────────────────────────── */
+/* Body base: 1rem (16px). Headlines min 30% larger. */
+h1 { font-size: 3rem;    line-height: 1.1; }
+h2 { font-size: 3.375rem; line-height: 1.1; }
+h3 { font-size: 1.75rem; line-height: 1.2; }
+h4 { font-size: 1.375rem; line-height: 1.25; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  text-transform: uppercase;
+  transform: scaleX(1.3);
+  transform-origin: left center;
+}
+
+/* ── Interactive elements: rust only ──────────────────── */
+a {
+  color: var(--color-rust);
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.85;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-rust);
+  outline-offset: 2px;
+}
+
+/* Nav links are cream, not rust */
+nav a {
+  color: var(--color-cream);
+}
+
+nav a:hover {
+  color: var(--color-rust);
+  opacity: 1;
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+.btn-rust {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-rust);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.625rem 1.5rem;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-rust:hover {
+  opacity: 0.9;
+  color: var(--color-cream);
+}
+
+.btn-rust:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 2px;
+}
+
+/* ── Follow page load-in ──────────────────────────────── */
+.follow-section-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.follow-section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .follow-section-hidden {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Sign-up page load-in ─────────────────────────────── */
+.su-section-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Section Spacing Rule
-   Removes top padding from a section when the previous sibling
-   section shares the same data-bg value. */
-section[data-bg="light"] + section[data-bg="light"],
-section[data-bg="dark"] + section[data-bg="dark"],
-section[data-bg="accent"] + section[data-bg="accent"] {
+.su-section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su-section-hidden {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Tour page load-in ────────────────────────────────── */
+.tp-section-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tp-section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tp-section-hidden {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Videos page load-in + tile hover ─────────────────── */
+.vp-section-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vp-section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vp-tile {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out,
+              outline-color 0.15s ease-out;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.vp-tile:hover {
+  transform: scale(1.03);
+  outline-color: var(--color-rust);
+}
+
+.vp-tile:active {
+  transform: scale(1.01);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vp-section-hidden {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .vp-tile {
+    transition: none;
+  }
+}
+
+/* ── Music page section load-in ───────────────────────── */
+.music-section-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.music-section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-section-hidden {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Email list section load-in animation ─────────────── */
+.email-section .email-anim-heading {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.email-section .email-anim-subline {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.email-section .email-anim-form {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.email-in-view .email-anim-heading,
+.email-in-view .email-anim-subline,
+.email-in-view .email-anim-form {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .email-section .email-anim-heading,
+  .email-section .email-anim-subline,
+  .email-section .email-anim-form {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Videos section load-in animation ─────────────────── */
+.videos-section .videos-anim-heading {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.videos-section .videos-anim-subline {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.videos-section .videos-anim-featured {
+  opacity: 0;
+  filter: blur(6px);
+  scale: 1.05;
+  transition: opacity 0.7s 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.7s 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              scale 0.7s 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.videos-section .videos-anim-strip {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.videos-in-view .videos-anim-heading,
+.videos-in-view .videos-anim-subline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.videos-in-view .videos-anim-featured {
+  opacity: 1;
+  filter: blur(0);
+  scale: 1;
+}
+
+.videos-in-view .videos-anim-strip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Featured swap transition */
+.vid-swap-out {
+  opacity: 0;
+  scale: 1.03;
+  filter: blur(4px);
+}
+
+.vid-swap-in {
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              scale 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .videos-section .videos-anim-heading,
+  .videos-section .videos-anim-subline,
+  .videos-section .videos-anim-featured,
+  .videos-section .videos-anim-strip {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    scale: 1;
+    transition: none;
+  }
+  .vid-swap-out,
+  .vid-swap-in {
+    transition: none;
+    opacity: 1;
+    scale: 1;
+    filter: none;
+  }
+}
+
+/* ── About section load-in animation ──────────────────── */
+.about-section .about-anim-heading {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-section .about-anim-photo {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-section .about-anim-bio {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-in-view .about-anim-heading,
+.about-in-view .about-anim-photo,
+.about-in-view .about-anim-bio {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-section .about-anim-heading,
+  .about-section .about-anim-photo,
+  .about-section .about-anim-bio {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Tour section load-in animation ───────────────────── */
+.tour-section .tour-anim-heading {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tour-section .tour-anim-subline {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tour-section .tour-anim-row {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tour-in-view .tour-anim-heading,
+.tour-in-view .tour-anim-subline,
+.tour-in-view .tour-anim-row {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-section .tour-anim-heading,
+  .tour-section .tour-anim-subline,
+  .tour-section .tour-anim-row {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── EP section load-in animation ─────────────────────── */
+.ep-section .ep-anim-heading {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ep-section .ep-anim-subline {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ep-section .ep-anim-cover {
+  opacity: 0;
+  filter: blur(6px);
+  scale: 1.06;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              scale 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ep-section .ep-anim-title {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Visible state — triggered by observer */
+.ep-in-view .ep-anim-heading,
+.ep-in-view .ep-anim-subline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ep-in-view .ep-anim-cover {
+  opacity: 1;
+  filter: blur(0);
+  scale: 1;
+}
+
+.ep-in-view .ep-anim-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ep-section .ep-anim-heading,
+  .ep-section .ep-anim-subline,
+  .ep-section .ep-anim-cover,
+  .ep-section .ep-anim-title {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    scale: 1;
+    transition: none;
+  }
+}
+
+
+/* ── Pre-save button (header, cream fill, extruded) ──── */
+.btn-presave {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-cream);
+  color: #000;
+  font-family: var(--font-headline);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 #000;
+  transform: translate(0, 0);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-presave:hover {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 1.5px 1.5px 0 #000;
+  color: #000;
+  opacity: 1;
+}
+
+.btn-presave:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #000;
+}
+
+.btn-presave:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 2px;
+}
+
+.btn-presave-rust {
+  background-color: var(--color-rust);
+  color: var(--color-cream);
+}
+
+.btn-presave-rust:hover {
+  color: var(--color-cream);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-presave {
+    transition: none;
+  }
+}
+
+/* ── Listen button (extruded shadow) ──────────────────── */
+.btn-listen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-rust);
+  color: var(--color-cream);
+  font-family: var(--font-headline);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.625rem 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  box-shadow: 4px 4px 0 #000;
+  transform: translate(0, 0);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-listen:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #000;
+  color: var(--color-cream);
+  opacity: 1;
+}
+
+.btn-listen:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #000;
+}
+
+.btn-listen:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-listen {
+    transition: none;
+  }
+}
+
+/* ── Hero reveal animation ────────────────────────────── */
+
+/*
+ * Fix 1 & 2: Responsive center offsets.
+ * Translate % is relative to the element's own box, so the values
+ * needed to reach visual center differ per breakpoint because element
+ * widths change. Custom properties on each element let the shared
+ * keyframes resolve the correct value at every width.
+ */
+
+/* HOWDY center offsets (74% wide mobile, 67.5% md, 67.5% lg) */
+.hero-reveal-title {
+  --cx: 18%;
+  --cy: 280%;
+  --hero-scale: 1.5;
+}
+@media (min-width: 768px) {
+  .hero-reveal-title {
+    --cx: 24%;
+    --cy: 250%;
+    --hero-scale: 1.875;
+  }
+}
+@media (min-width: 1024px) {
+  .hero-reveal-title {
+    --cx: 22%;
+    --cy: 240%;
+    --hero-scale: 1.875;
+  }
+}
+
+/* Script center offsets (34% wide mobile, 31.5% md/lg) */
+.hero-reveal-name {
+  --cx: -100%;
+  --cy: 420%;
+}
+@media (min-width: 768px) {
+  .hero-reveal-name {
+    --cx: -120%;
+    --cy: 380%;
+  }
+}
+@media (min-width: 1024px) {
+  .hero-reveal-name {
+    --cx: -115%;
+    --cy: 360%;
+  }
+}
+
+/* 1. HOWDY — fades in large at center, holds, travels to top-left */
+@keyframes hero-howdy-reveal {
+  0% {
+    opacity: 0;
+    transform: translate(var(--cx), var(--cy)) scale(var(--hero-scale));
+    animation-timing-function: ease-out;
+  }
+  26% {
+    opacity: 1;
+    transform: translate(var(--cx), var(--cy)) scale(var(--hero-scale));
+    animation-timing-function: ease;
+  }
+  55% {
+    opacity: 1;
+    transform: translate(var(--cx), var(--cy)) scale(var(--hero-scale));
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* 2. Script — hidden behind HOWDY at center, splits to top-right */
+@keyframes hero-script-split {
+  0% {
+    opacity: 0;
+    transform: translate(var(--cx), var(--cy));
+  }
+  5% {
+    opacity: 1;
+    transform: translate(var(--cx), var(--cy));
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* 3. Photo frame — focus-pull: blur-to-sharp with scale overshoot */
+@keyframes hero-frame-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.82);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+/* 4. Continuous photo breathe */
+@keyframes hero-photo-breathe {
+  from { transform: scale(1); }
+  to   { transform: scale(1.04); }
+}
+
+/* 5. CTA button — fade up into place */
+@keyframes hero-cta-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shared fill-mode */
+.hero-reveal-frame,
+.hero-reveal-title,
+.hero-reveal-name,
+.hero-reveal-cta {
+  animation-fill-mode: both;
+}
+
+/* 1. HOWDY: fade in centered, hold, diagonal to top-left (0s–1.7s) */
+.hero-reveal-title {
+  animation: hero-howdy-reveal 1.7s 0s both;
+}
+
+/* 2. Script: split from behind HOWDY to top-right (0.95s–1.7s) */
+.hero-reveal-name {
+  animation: hero-script-split 0.75s 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* 3. Frame: focus-pull with overshoot (1.3s–2.1s) */
+.hero-reveal-frame {
+  animation: hero-frame-appear 0.8s 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 4. CTA: fade in after frame (1.8s–2.1s) */
+.hero-reveal-cta {
+  animation: hero-cta-in 0.4s 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 5. Photo breathe — starts after entrance completes */
+.hero-photo-breathe {
+  animation: hero-photo-breathe 14s 2.4s ease-in-out infinite alternate;
+}
+
+/* ── EP section scroll reveal ─────────────────────────── */
+
+/* Hidden state */
+.ep-block-hidden {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ep-block-hidden .ep-block-cover {
+  filter: blur(6px);
+  transform: scale(1.06);
+  transition: filter 0.8s 0.1s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s 0.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ep-block-hidden .ep-block-info {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Visible state */
+.ep-block-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ep-block-visible .ep-block-cover {
+  filter: blur(0);
+  transform: scale(1);
+}
+
+.ep-block-visible .ep-block-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ep-block-hidden {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .ep-block-hidden .ep-block-cover {
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+  .ep-block-hidden .ep-block-info {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Page transitions ─────────────────────────────────── */
+.page-transition {
+  will-change: opacity;
+}
+
+.page-visible {
+  opacity: 1;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-enter {
+  opacity: 1;
+}
+
+/* ── Bandsintown widget overrides ──────────────────────── */
+.bit-widget-initializer .bit-top-track-button,
+.bit-widget-initializer .bit-upcoming-events-header,
+.bit-widget-initializer .bit-logo {
+  display: none !important;
+}
+
+/* ── Reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Section Spacing Rule ─────────────────────────────── */
+section[data-bg="brown"] + section[data-bg="brown"],
+section[data-bg="cream"] + section[data-bg="cream"] {
   padding-top: 0;
+}
+
+/* ── Scrollbar ────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
