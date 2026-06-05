@@ -159,9 +159,7 @@ export default function SignupForm({
         >
           By submitting this form, you agree to the{" "}
           <a
-            href="https://www.bigmachinelabelgroup.com/privacy-notice"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/privacy"
             className="text-rust underline"
           >
             Big Machine Records Privacy Policy

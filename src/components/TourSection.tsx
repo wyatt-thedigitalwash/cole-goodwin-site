@@ -47,18 +47,15 @@ export default function TourSection() {
       <section
         ref={sectionRef}
         id="tour"
-        className="tour-section bg-brown px-5 py-20 md:px-8 md:py-28"
+        className="tour-section bg-brown px-5 py-28 md:px-8 md:py-36"
         data-bg="brown"
       >
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-6xl">
           {/* Heading */}
           <div className="mb-14 flex flex-col items-center md:mb-20">
             <h2 className="tour-anim-heading" style={centeredHeadline}>
               Tour
             </h2>
-            <p className="tour-anim-subline mt-3 text-sm uppercase tracking-[0.2em] text-cream/70 md:text-base">
-              Catch him live
-            </p>
           </div>
 
           {/* Widget or fallback */}
@@ -94,9 +91,9 @@ export default function TourSection() {
                 data-button-bar-color="#F9F0E3"
                 data-separator-color="rgba(249,240,227,0.2)"
                 data-display-limit="all"
-                data-display-track-button="true"
+                data-display-track-button="false"
                 data-display-rsvp-button="true"
-                data-display-play-my-city="true"
+                data-display-play-my-city="false"
                 aria-label="Cole Goodwin tour dates"
               />
             )}

@@ -15,7 +15,16 @@ export default function PageTransition({
     if (pathname === prevPathname.current) return;
     prevPathname.current = pathname;
 
-    // Instant jump to top — no scrolling visible
+    // If the URL has a hash, let the browser scroll to the anchor
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+        return;
+      }
+    }
+
+    // Otherwise jump to top
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [pathname]);
 

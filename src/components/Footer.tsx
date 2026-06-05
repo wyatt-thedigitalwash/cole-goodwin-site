@@ -23,9 +23,9 @@ const SOCIAL_LINKS = [
 
 const LEGAL_LINKS = [
   { label: "Terms", href: "#", newTab: true },
-  { label: "Do Not Sell My Personal Information", href: "#", newTab: false },
-  { label: "Privacy", href: "#", newTab: false },
-  { label: "Cookie Choices", href: "#", newTab: false },
+  { label: "Do Not Sell My Personal Information", href: "/privacy", newTab: false },
+  { label: "Privacy", href: "/privacy", newTab: false },
+  { label: "Cookie Choices", href: "/privacy#cookies-policy", newTab: false },
 ];
 
 export default function Footer() {

@@ -53,18 +53,15 @@ export default function VideosClient({ videos }: { videos: VideoEntry[] }) {
     <section
       ref={sectionRef}
       id="videos"
-      className="videos-section bg-brown px-5 py-20 md:px-8 md:py-28"
+      className="videos-section bg-brown px-5 py-28 md:px-8 md:py-36"
       data-bg="brown"
     >
-      <div className="mx-auto max-w-[900px]">
+      <div className="mx-auto max-w-6xl">
         {/* Heading */}
         <div className="mb-14 flex flex-col items-center md:mb-20">
           <h2 className="videos-anim-heading" style={centeredHeadline}>
             Videos
           </h2>
-          <p className="videos-anim-subline mt-3 text-sm uppercase tracking-[0.2em] text-cream/70 md:text-base">
-            Watch
-          </p>
         </div>
 
         {/* Featured title */}
@@ -120,7 +117,7 @@ export default function VideosClient({ videos }: { videos: VideoEntry[] }) {
         </div>
 
         {/* Strip thumbnails — fills featured width */}
-        <div className="mt-6 flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory md:mt-8 md:grid md:grid-cols-4 md:gap-3 md:overflow-visible md:pb-0">
+        <div className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4">
           {videos.map((video, i) => {
             const isActive = i === featuredIdx;
             return (
@@ -129,7 +126,7 @@ export default function VideosClient({ videos }: { videos: VideoEntry[] }) {
                 type="button"
                 onClick={() => handleStripClick(i)}
                 aria-label={`Watch ${video.title}`}
-                className={`videos-anim-strip relative aspect-video w-[45%] flex-shrink-0 snap-start overflow-hidden rounded-lg md:w-auto ${
+                className={`videos-anim-strip relative aspect-video overflow-hidden rounded-lg ${
                   isActive
                     ? "ring-2 ring-rust ring-offset-2 ring-offset-brown"
                     : ""

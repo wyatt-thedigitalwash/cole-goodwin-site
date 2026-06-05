@@ -55,7 +55,7 @@ export default function EPSection() {
     <section
       ref={sectionRef}
       id="the-ep"
-      className="ep-section bg-brown px-5 py-20 md:px-8 md:py-28"
+      className="ep-section bg-brown px-5 py-28 md:px-8 md:py-36"
       data-bg="brown"
     >
       <div className="mx-auto max-w-7xl">

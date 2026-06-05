@@ -33,11 +33,18 @@ export default function Header() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [forceTransparent, setForceTransparent] = useState(false);
 
-  // Close menu on route change
+  // Close menu on route change — fade out, then unmount
   useEffect(() => {
-    setMenuOpen(false);
-    setMenuVisible(false);
-  }, [pathname]);
+    if (menuOpen) {
+      // Small delay so the new page renders behind the overlay first
+      const fadeTimer = setTimeout(() => setMenuVisible(false), 100);
+      const unmountTimer = setTimeout(() => setMenuOpen(false), 500);
+      return () => {
+        clearTimeout(fadeTimer);
+        clearTimeout(unmountTimer);
+      };
+    }
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Determine header state based on page type and scroll
   useEffect(() => {
@@ -102,11 +109,11 @@ export default function Header() {
   const durFast = reducedMotion ? "duration-0" : "duration-200";
 
   const hamburgerHidden = pastHero;
-  const showChrome = (scrolled || menuOpen) && !forceTransparent;
+  const showChrome = (scrolled || menuVisible) && !forceTransparent;
 
   const handleNavClick = useCallback(() => {
-    setMenuVisible(false);
-    setTimeout(() => setMenuOpen(false), 400);
+    // Don't close menu here — let the route change effect handle the fade-out
+    // so the new page renders behind the overlay before it disappears
   }, []);
 
   return (
@@ -173,7 +180,9 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     onClick={handleNavClick}
-                    className={`mr-6 uppercase tracking-wider text-cream will-change-[transform,opacity] hover:text-rust ${
+                    className={`mr-6 uppercase tracking-wider will-change-[transform,opacity] hover:text-rust ${
+                      pathname === link.href ? "text-rust" : "text-cream"
+                    } ${
                       pastHero
                         ? "translate-x-0 opacity-100"
                         : "translate-x-[120px] opacity-0 pointer-events-none"
@@ -208,7 +217,7 @@ export default function Header() {
           <button
             type="button"
             className={`absolute top-0 bottom-0 right-6 my-auto flex h-10 w-10 items-center justify-center rounded-md !p-0 lg:right-8 ${
-              menuOpen
+              menuOpen && menuVisible
                 ? "z-50 bg-cream shadow-[3px_3px_0_#000]"
                 : hamburgerHidden
                   ? "z-10 opacity-0 pointer-events-none"
@@ -297,7 +306,7 @@ export default function Header() {
               key={link.href}
               href={link.href}
               onClick={handleNavClick}
-              className={`block uppercase tracking-wider text-cream transition-all hover:text-rust
+              className={`block uppercase tracking-wider transition-all hover:text-rust ${pathname === link.href ? "text-rust" : "text-cream"}
                 text-4xl py-3
                 md:text-5xl md:py-4
                 lg:text-6xl lg:py-5
@@ -317,7 +326,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleNavClick}
-            className={`btn-presave mt-6 text-lg transition-all max-md:bg-rust max-md:text-cream md:text-xl md:bg-cream md:text-black
+            className={`btn-presave mt-6 text-lg transition-all bg-rust text-cream md:text-xl
               ${menuVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
             style={{
               transitionDelay: menuVisible ? `${150 + MOBILE_MENU_LINKS.length * 60}ms` : "0ms",

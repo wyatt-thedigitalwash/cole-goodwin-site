@@ -48,8 +48,8 @@ export default function VideosPageClient({
 
   return (
     <main ref={pageRef} className="flex-1 bg-brown" data-header-style="transparent">
-      {/* Mobile banner — scrolls with content */}
-      <div className="md:hidden">
+      {/* Mobile banner — image with overlaid heading */}
+      <div className="relative md:hidden">
         <Image
           src="/banners/ColeGoodwin_HowdySingle_DesktopBanner.jpg"
           alt="Cole Goodwin"
@@ -59,14 +59,17 @@ export default function VideosPageClient({
           className="w-full"
           priority
         />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-brown/80 to-transparent pb-8 pt-20">
+          <h1 className="text-center text-[3.375rem]" style={centeredHeadline}>Videos</h1>
+        </div>
       </div>
 
       {/* Desktop: split layout */}
       <div className="md:flex">
         {/* Left column — videos */}
-        <div className="flex-1 pt-28 md:w-1/2 md:pt-32">
-          {/* Page hero */}
-          <section className="vp-section vp-section-hidden px-5 pb-12 text-center md:px-8 md:pb-16">
+        <div className="flex-1 pt-8 md:w-1/2 md:pt-32">
+          {/* Page hero — desktop only */}
+          <section className="vp-section vp-section-hidden hidden px-5 pb-12 text-center md:block md:px-8 md:pb-16">
             <h1 style={centeredHeadline}>Videos</h1>
           </section>
 

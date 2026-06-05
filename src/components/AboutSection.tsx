@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 const centeredHeadline: React.CSSProperties = {
   transformOrigin: "center center",
@@ -42,7 +43,7 @@ export default function AboutSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="about-section bg-brown px-5 py-20 md:px-8 md:py-28"
+      className="about-section bg-brown px-5 py-28 md:px-8 md:py-36"
       data-bg="brown"
     >
       <div className="mx-auto max-w-6xl">
@@ -57,12 +58,13 @@ export default function AboutSection() {
         <div className="flex flex-col gap-10 md:flex-row md:gap-14">
           {/* Photo column */}
           <div className="about-anim-photo w-full flex-shrink-0 md:w-[42%]">
-            {/* Placeholder — replace with portrait photo when available */}
-            <div
-              className="w-full rounded-lg bg-brown/60"
-              style={{ aspectRatio: "3 / 4" }}
-              role="img"
-              aria-label="Cole Goodwin portrait — coming soon"
+            <Image
+              src="/banners/ColeGoodwin_HowdyVisual.jpg"
+              alt="Cole Goodwin"
+              width={800}
+              height={1067}
+              sizes="(max-width: 768px) 100vw, 42vw"
+              className="w-full rounded-lg object-cover"
             />
           </div>
 

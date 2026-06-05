@@ -18,9 +18,12 @@ const EP_TRACKS = [
 ];
 
 const SINGLES = [
-  { title: "Messin\u2019 With My Mind", url: "https://colegoodwin.lnk.to/MessinWithMyMindWE" },
-  { title: "Dust On The Dancefloor", url: "https://colegoodwin.lnk.to/DustOnTheDancefloorWE" },
-  { title: "Girlfriend\u2019s Got A Boyfriend", url: "https://colegoodwin.lnk.to/GirlfriendsGotABoyfriendWE" },
+  { title: "Girl That\u2019s How", url: "#", cover: "/cover-images/ColeGoodwin_GirlThatsHow_CoverArt.jpg" },
+  { title: "Where She\u2019s Coming From", url: "https://colegoodwin.ffm.to/whereshescomingfrom", cover: "/cover-images/ColeGoodwin_WhereShesComingFrom_CoverArt.jpg" },
+  { title: "Howdy", url: "https://colegoodwin.lnk.to/howdyWE", cover: "/cover-images/ColeGoodwin_Howdy_CoverArt.jpg" },
+  { title: "Messin\u2019 With My Mind", url: "https://colegoodwin.lnk.to/MessinWithMyMindWE", cover: "/cover-images/ColeGoodwin_MessinWithMyMind_Cover.jpg" },
+  { title: "Dust on the Dancefloor", url: "https://colegoodwin.lnk.to/DustOnTheDancefloorWE", cover: "/cover-images/ColeGoodwin_DustOnTheDanceFloor_Cover.jpg" },
+  { title: "Girlfriend\u2019s Got a Boyfriend", url: "https://colegoodwin.lnk.to/GirlfriendsGotABoyfriendWE", cover: "/cover-images/ColeGoodwin_GirlfriendsGotABoyfriend_Cover.jpg" },
 ];
 
 const PLATFORMS = [
@@ -79,8 +82,7 @@ export default function MusicPage() {
             {/* Right — EP info + track strip */}
             <div className="flex flex-1 flex-col items-center md:items-start">
               <h1
-                className="text-center text-5xl md:text-left md:text-6xl lg:text-7xl md:[transform-origin:left_center]"
-                style={centeredHeadline}
+                className="text-center text-5xl [transform-origin:center_center] md:text-left md:text-6xl md:[transform-origin:left_center] lg:text-7xl"
               >
                 The Howdy EP
               </h1>
@@ -123,8 +125,13 @@ export default function MusicPage() {
                         />
                       ) : (
                         <div className="flex h-full w-full flex-col items-center justify-center bg-black/40">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-cream/40 md:text-xs">
-                            06.26
+                          <span
+                            className="text-center text-xs uppercase leading-tight text-cream/50 md:text-sm"
+                            style={{ fontFamily: "var(--font-headline)", fontWeight: 700 }}
+                          >
+                            Coming
+                            <br />
+                            Soon
                           </span>
                         </div>
                       )}
@@ -140,43 +147,39 @@ export default function MusicPage() {
         </div>
       </section>
 
-      {/* Section 3: Singles */}
+      {/* Section 2: Singles */}
       <section className="music-section music-section-hidden px-5 py-16 md:px-8 md:py-24">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-5xl">
           <div className="mb-10 text-center md:mb-14">
             <h2 style={centeredHeadline}>Singles</h2>
-            <p className="mt-3 text-sm uppercase tracking-[0.2em] text-cream/70 md:text-base">
-              More from Cole
-            </p>
           </div>
 
-          <div className="flex flex-col">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8">
             {SINGLES.map((single) => (
-              <div
+              <a
                 key={single.title}
-                className="flex flex-col gap-3 border-t border-cream/10 py-5 md:flex-row md:items-center md:gap-6"
+                href={single.url}
+                target={single.url !== "#" ? "_blank" : undefined}
+                rel={single.url !== "#" ? "noopener noreferrer" : undefined}
+                className="group text-center"
               >
-                <div className="flex-1">
-                  <p
-                    className="uppercase text-cream"
-                    style={{
-                      fontFamily: "var(--font-headline)",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {single.title}
-                  </p>
-                  <p className="mt-0.5 text-sm text-cream/50">Single</p>
+                <div className="overflow-hidden rounded-lg">
+                  <Image
+                    src={single.cover}
+                    alt={single.title}
+                    width={600}
+                    height={600}
+                    sizes="(max-width: 768px) 45vw, 30vw"
+                    className="w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                  />
                 </div>
-                <a
-                  href={single.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-listen self-start text-sm md:self-center"
+                <p
+                  className="mt-3 text-sm uppercase text-cream md:text-base"
+                  style={{ fontFamily: "var(--font-headline)", fontWeight: 700 }}
                 >
-                  Listen
-                </a>
-              </div>
+                  {single.title}
+                </p>
+              </a>
             ))}
           </div>
         </div>

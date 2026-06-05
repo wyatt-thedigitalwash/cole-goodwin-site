@@ -11,6 +11,9 @@ export default function HeroScrollLock() {
     ).matches;
     if (prefersReducedMotion) return;
 
+    const played = sessionStorage.getItem("hero-played");
+    if (played) return;
+
     document.body.style.overflow = "hidden";
 
     const timer = setTimeout(() => {

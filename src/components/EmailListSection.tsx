@@ -36,7 +36,7 @@ export default function EmailListSection() {
   return (
     <section
       ref={sectionRef}
-      className="email-section bg-cream px-5 py-20 md:px-8 md:py-28"
+      className="email-section bg-cream px-5 py-28 md:px-8 md:py-36"
       data-bg="cream"
     >
       <div className="mx-auto max-w-2xl text-center">
