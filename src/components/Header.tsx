@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useLayoutEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,7 +32,6 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [forceTransparent, setForceTransparent] = useState(false);
-  const [suppressTransition, setSuppressTransition] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
 
@@ -47,19 +46,6 @@ export default function Header() {
       };
     }
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Immediately hide logo on home before paint — no transition
-  useLayoutEffect(() => {
-    if (isHome) {
-      setSuppressTransition(true);
-      setPastHero(false);
-      setScrolled(false);
-      // Re-enable transitions after the frame paints
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setSuppressTransition(false));
-      });
-    }
-  }, [isHome]);
 
   // Determine header state based on page type and scroll
   useEffect(() => {
@@ -172,6 +158,10 @@ export default function Header() {
   const dur = reducedMotion ? "duration-0" : "duration-[400ms]";
   const durFast = reducedMotion ? "duration-0" : "duration-200";
 
+  // On home, logo only shows after scrolling past hero (pastHero && isHome means scrolled past)
+  // On other pages, logo always shows (pastHero is true)
+  // Key: if isHome and we haven't scrolled past hero yet, ALWAYS hide — no transition
+  const showLogo = isHome ? pastHero && scrolled : pastHero;
   const hamburgerHidden = pastHero;
   const showChrome = (scrolled || menuVisible) && !forceTransparent;
 
@@ -194,12 +184,12 @@ export default function Header() {
           aria-label="Cole Goodwin — home"
           onClick={handleNavClick}
           className={`${
-            pastHero
+            showLogo
               ? "opacity-100"
               : "opacity-0 pointer-events-none"
           }`}
           style={{
-            transition: reducedMotion || suppressTransition
+            transition: reducedMotion
               ? "none"
               : "opacity 300ms ease",
           }}
