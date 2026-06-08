@@ -40,6 +40,7 @@ export default function Footer() {
             alt="Cole Goodwin"
             width={400}
             height={150}
+            sizes="158px"
             className="h-auto w-[123px] md:w-[158px]"
           />
 

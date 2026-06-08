@@ -60,7 +60,8 @@ export default function FollowPageClient() {
   }, []);
 
   return (
-    <div ref={pageRef} className="bg-brown pt-28 md:pt-32">
+    <main id="main-content" ref={pageRef} className="flex-1 bg-brown pt-28 md:pt-32">
+      <h1 className="sr-only">Follow Along</h1>
       {/* Social + Listen — two columns on desktop, stacked on mobile */}
       <section className="follow-section follow-section-hidden px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-5xl">
@@ -124,6 +125,6 @@ export default function FollowPageClient() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

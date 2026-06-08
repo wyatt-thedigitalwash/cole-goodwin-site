@@ -46,7 +46,7 @@ export default function TourPageClient() {
         onError={() => setScriptError(true)}
       />
 
-      <main ref={pageRef} className="flex-1 bg-brown" data-header-style="transparent">
+      <main id="main-content" ref={pageRef} className="flex-1 bg-brown" data-header-style="transparent">
         {/* Mobile banner — video with overlaid heading */}
         <div className="relative md:hidden">
           <video
@@ -54,6 +54,7 @@ export default function TourPageClient() {
             loop
             muted
             playsInline
+            aria-hidden="true"
             poster="/video/ColeGoodwin_TourBanner_Square_poster.jpg"
             className="w-full"
           >
@@ -147,6 +148,7 @@ export default function TourPageClient() {
               loop
               muted
               playsInline
+              aria-hidden="true"
               poster="/video/ColeGoodwin_TourBanner_Square_poster.jpg"
               className="absolute inset-0 h-full w-full object-cover"
             >

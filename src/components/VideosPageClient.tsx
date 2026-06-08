@@ -47,7 +47,7 @@ export default function VideosPageClient({
   }
 
   return (
-    <main ref={pageRef} className="flex-1 bg-brown" data-header-style="transparent">
+    <main id="main-content" ref={pageRef} className="flex-1 bg-brown" data-header-style="transparent">
       {/* Mobile banner — image with overlaid heading */}
       <div className="relative md:hidden">
         <Image
@@ -126,12 +126,12 @@ export default function VideosPageClient({
                         )}
                       </div>
 
-                      <h3
+                      <h2
                         className="mt-4 text-center text-lg md:text-xl"
                         style={centeredHeadline}
                       >
                         {title}
-                      </h3>
+                      </h2>
                     </div>
                   );
                 })}

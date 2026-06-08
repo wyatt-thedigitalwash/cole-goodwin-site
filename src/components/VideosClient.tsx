@@ -97,6 +97,8 @@ export default function VideosClient({ videos }: { videos: VideoEntry[] }) {
               <img
                 src={`https://img.youtube.com/vi/${featured.id}/maxresdefault.jpg`}
                 alt={cleanTitle(featured.title)}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
               {/* Play button — extruded rust */}

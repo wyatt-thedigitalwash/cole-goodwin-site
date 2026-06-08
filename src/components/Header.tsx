@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useLayoutEffect, useCallback, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,11 +32,12 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [forceTransparent, setForceTransparent] = useState(false);
+  const menuRef = useRef<HTMLElement>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
 
   // Close menu on route change — fade out, then unmount
   useEffect(() => {
     if (menuOpen) {
-      // Small delay so the new page renders behind the overlay first
       const fadeTimer = setTimeout(() => setMenuVisible(false), 100);
       const unmountTimer = setTimeout(() => setMenuOpen(false), 500);
       return () => {
@@ -45,6 +46,14 @@ export default function Header() {
       };
     }
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Immediately hide logo on home before paint
+  useLayoutEffect(() => {
+    if (isHome) {
+      setPastHero(false);
+      setScrolled(false);
+    }
+  }, [isHome]);
 
   // Determine header state based on page type and scroll
   useEffect(() => {
@@ -87,14 +96,63 @@ export default function Header() {
     }
   }, [pathname, isHome]);
 
+  // Escape key closes menu
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMenuVisible(false);
+        setTimeout(() => {
+          setMenuOpen(false);
+          menuToggleRef.current?.focus();
+        }, 400);
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
+
+  // Focus trap inside menu overlay
+  useEffect(() => {
+    if (!menuOpen || !menuVisible) return;
+    const nav = menuRef.current;
+    if (!nav) return;
+
+    const focusable = nav.querySelectorAll<HTMLElement>(
+      'a[href], button, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    first.focus();
+
+    function trapFocus(e: KeyboardEvent) {
+      if (e.key !== "Tab") return;
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+    document.addEventListener("keydown", trapFocus);
+    return () => document.removeEventListener("keydown", trapFocus);
+  }, [menuOpen, menuVisible]);
+
   // Animate menu open/close
   function toggleMenu() {
     if (menuOpen) {
-      // Close: fade out first, then unmount
       setMenuVisible(false);
-      setTimeout(() => setMenuOpen(false), 400);
+      setTimeout(() => {
+        setMenuOpen(false);
+        menuToggleRef.current?.focus();
+      }, 400);
     } else {
-      // Open: mount first, then fade in
       setMenuOpen(true);
       requestAnimationFrame(() => {
         requestAnimationFrame(() => setMenuVisible(true));
@@ -113,7 +171,6 @@ export default function Header() {
 
   const handleNavClick = useCallback(() => {
     // Don't close menu here — let the route change effect handle the fade-out
-    // so the new page renders behind the overlay before it disappears
   }, []);
 
   return (
@@ -143,7 +200,7 @@ export default function Header() {
         >
           <Image
             src="/branding/HowdyNameLogo_Flat.png"
-            alt="Cole Goodwin"
+            alt=""
             width={160}
             height={40}
             className="h-8 w-auto md:h-10"
@@ -174,14 +231,16 @@ export default function Header() {
                 const delay = pastHero
                   ? `${reverseIdx * 40}ms`
                   : `${(NAV_LINKS.length - 1 - reverseIdx) * 40}ms`;
+                const isActive = pathname === link.href;
 
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={handleNavClick}
+                    aria-current={isActive ? "page" : undefined}
                     className={`mr-6 uppercase tracking-wider will-change-[transform,opacity] hover:text-rust ${
-                      pathname === link.href ? "text-rust" : "text-cream"
+                      isActive ? "text-rust" : "text-cream"
                     } ${
                       pastHero
                         ? "translate-x-0 opacity-100"
@@ -206,7 +265,7 @@ export default function Header() {
               href={PRESAVE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Pre-save Howdy EP — opens in a new window"
+              aria-label="Pre-save Howdy EP — opens in a new tab"
               className="btn-presave relative z-20 shrink-0"
             >
               Pre-save
@@ -215,6 +274,7 @@ export default function Header() {
 
           {/* Desktop hamburger */}
           <button
+            ref={menuToggleRef}
             type="button"
             className={`absolute top-0 bottom-0 right-6 my-auto flex h-10 w-10 items-center justify-center rounded-md !p-0 lg:right-8 ${
               menuOpen && menuVisible
@@ -236,7 +296,7 @@ export default function Header() {
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
           >
-            <div className="relative flex w-5 flex-col items-center justify-center" style={{ height: "12px" }}>
+            <div className="relative flex w-5 flex-col items-center justify-center" style={{ height: "12px" }} aria-hidden="true">
               <span
                 className={`absolute block h-[2px] w-full bg-cream transition-all ${durFast} ${
                   menuOpen ? "rotate-45 !bg-rust translate-y-0" : "translate-y-[-5px]"
@@ -258,6 +318,7 @@ export default function Header() {
 
         {/* Mobile hamburger */}
         <button
+          ref={menuToggleRef}
           type="button"
           className={`relative ml-auto flex h-10 w-10 items-center justify-center rounded-md md:hidden ${
             menuOpen
@@ -273,7 +334,7 @@ export default function Header() {
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
-          <div className="relative flex w-6 flex-col items-center justify-center" style={{ height: "14px" }}>
+          <div className="relative flex w-6 flex-col items-center justify-center" style={{ height: "14px" }} aria-hidden="true">
             <span
               className={`absolute block h-[2px] w-full transition-all ${durFast} ${
                 menuOpen ? "rotate-45 bg-rust translate-y-0" : "translate-y-[-6px] bg-cream"
@@ -296,35 +357,43 @@ export default function Header() {
       {/* Full-screen menu — animated overlay */}
       {menuOpen && (
         <nav
+          ref={menuRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
           className={`fixed inset-0 z-40 flex flex-col items-center justify-center bg-brown transition-opacity ${
             reducedMotion ? "duration-0" : "duration-[400ms]"
           } ease-out ${menuVisible ? "opacity-100" : "opacity-0"}`}
-          aria-label="Full-screen navigation"
         >
-          {MOBILE_MENU_LINKS.map((link, i) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={handleNavClick}
-              className={`block uppercase tracking-wider transition-all hover:text-rust ${pathname === link.href ? "text-rust" : "text-cream"}
-                text-4xl py-3
-                md:text-5xl md:py-4
-                lg:text-6xl lg:py-5
-                ${menuVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-              style={{
-                fontFamily: "var(--font-headline)",
-                transitionDelay: menuVisible ? `${150 + i * 60}ms` : "0ms",
-                transitionDuration: reducedMotion ? "0ms" : "400ms",
-                transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {MOBILE_MENU_LINKS.map((link, i) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={handleNavClick}
+                aria-current={isActive ? "page" : undefined}
+                className={`block uppercase tracking-wider transition-all hover:text-rust ${isActive ? "text-rust" : "text-cream"}
+                  text-4xl py-3
+                  md:text-5xl md:py-4
+                  lg:text-6xl lg:py-5
+                  ${menuVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
+                style={{
+                  fontFamily: "var(--font-headline)",
+                  transitionDelay: menuVisible ? `${150 + i * 60}ms` : "0ms",
+                  transitionDuration: reducedMotion ? "0ms" : "400ms",
+                  transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <a
             href={PRESAVE_URL}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Pre-save Howdy EP — opens in a new tab"
             onClick={handleNavClick}
             className={`btn-presave mt-6 text-lg transition-all bg-rust text-cream md:text-xl
               ${menuVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}

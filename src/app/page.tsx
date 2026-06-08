@@ -1,5 +1,4 @@
 import Hero from "@/components/Hero";
-import HeroScrollLock from "@/components/HeroScrollLock";
 import EPSection from "@/components/EPSection";
 import VideoBanner from "@/components/VideoBanner";
 import TourSection from "@/components/TourSection";
@@ -9,8 +8,7 @@ import EmailListSection from "@/components/EmailListSection";
 
 export default function Home() {
   return (
-    <main className="flex-1">
-      <HeroScrollLock />
+    <main id="main-content" className="flex-1">
       <Hero />
       <EPSection />
       <VideoBanner />

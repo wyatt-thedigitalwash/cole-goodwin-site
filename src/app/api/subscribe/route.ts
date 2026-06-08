@@ -8,12 +8,67 @@
 
 import { NextResponse } from "next/server";
 
+// ── Rate limiting (in-memory, per-IP) ──────────────────
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 3;
+const RATE_LIMIT_WINDOW = 5 * 60 * 1000; // 5 minutes
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    return false;
+  }
+
+  entry.count += 1;
+  return entry.count > RATE_LIMIT_MAX;
+}
+
 export async function POST(request: Request) {
   try {
+    // Rate limit by IP
+    const forwarded = request.headers.get("x-forwarded-for");
+    const ip = forwarded?.split(",")[0]?.trim() || "unknown";
+
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
+
+    // Honeypot — if the hidden field is filled, silently succeed
+    if (body.website) {
+      return NextResponse.json({ ok: true });
+    }
+
     const email = typeof body.email === "string" ? body.email.trim() : "";
     const zip = typeof body.zip === "string" ? body.zip.trim() : "";
     const country = typeof body.country === "string" ? body.country.trim() : "";
+
+    // Input length limits
+    if (email.length > 254) {
+      return NextResponse.json(
+        { error: "Email address is too long." },
+        { status: 400 }
+      );
+    }
+    if (zip.length > 20) {
+      return NextResponse.json(
+        { error: "Zip or postal code is too long." },
+        { status: 400 }
+      );
+    }
+    if (country.length > 100) {
+      return NextResponse.json(
+        { error: "Country name is too long." },
+        { status: 400 }
+      );
+    }
 
     // Validate inputs
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -41,12 +96,7 @@ export async function POST(request: Request) {
     const mailchimpListId = process.env.MAILCHIMP_LIST_ID;
 
     if (!layloKey || !mailchimpKey || !mailchimpListId) {
-      console.error(
-        "[Subscribe] Missing env vars:",
-        !layloKey && "LAYLO_API_KEY",
-        !mailchimpKey && "MAILCHIMP_API_KEY",
-        !mailchimpListId && "MAILCHIMP_LIST_ID"
-      );
+      console.error("[Subscribe] Missing env vars");
       return NextResponse.json(
         { error: "Server configuration error. Please try again later." },
         { status: 500 }
@@ -129,7 +179,7 @@ export async function POST(request: Request) {
     }
 
     console.log(
-      `[Subscribe] ${email} -- laylo: ${layloOk}, mailchimp: ${mailchimpOk}`
+      `[Subscribe] laylo: ${layloOk}, mailchimp: ${mailchimpOk}`
     );
 
     if (layloOk || mailchimpOk) {

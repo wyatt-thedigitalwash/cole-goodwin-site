@@ -64,6 +64,11 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
+button:focus-visible {
+  outline: 2px solid var(--color-rust);
+  outline-offset: 2px;
+}
+
 /* Nav links are cream, not rust */
 nav a {
   color: var(--color-cream);
@@ -812,6 +817,7 @@ nav a:hover {
 .prose-privacy h1 {
   font-size: 2.25rem;
   line-height: 1.2;
+  transform-origin: center center;
 }
 .prose-privacy h2 {
   font-size: 1.5rem;

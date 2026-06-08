@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - Cole Goodwin",
+  title: "Privacy Policy",
   description:
-    "Privacy policy and cookies policy for the official Cole Goodwin website.",
+    "Privacy policy and cookies policy for the official Cole Goodwin website operated by Big Machine Records.",
+  alternates: { canonical: "https://colegoodwinmusic.com/privacy" },
+  robots: { index: false, follow: true },
 };
 
 export default function Privacy() {
   return (
-    <main className="bg-brown pt-28 pb-20 md:pt-32 md:pb-28">
+    <main id="main-content" className="bg-brown pt-28 pb-20 md:pt-32 md:pb-28">
       <article className="prose-privacy mx-auto max-w-3xl px-5 text-cream/90 md:px-8">
         <h1 className="mb-10 text-center">Privacy Policy</h1>
 
@@ -860,7 +862,7 @@ export default function Privacy() {
 
         <hr className="my-16 border-cream/20" />
 
-        <h1 id="cookies-policy" className="mb-4 text-center">Cookies Policy</h1>
+        <h2 id="cookies-policy" className="mb-4 text-center text-[2.25rem]">Cookies Policy</h2>
         <p className="mb-10 text-center text-sm text-cream/50">
           Last updated May 26, 2026
         </p>

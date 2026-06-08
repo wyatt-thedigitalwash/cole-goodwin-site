@@ -62,29 +62,29 @@ export default function MusicPage() {
   }, []);
 
   return (
-    <div ref={pageRef} className="bg-brown">
+    <main id="main-content" ref={pageRef} className="flex-1 bg-brown">
       {/* Section 1: EP Hero — two-column showcase, fills the viewport */}
       <section className="music-section music-section-hidden flex min-h-screen items-center px-5 py-16 md:px-12 md:py-24 lg:px-20">
-        <div className="mx-auto w-full max-w-7xl">
+        <div className="mx-auto w-full max-w-5xl md:max-w-7xl">
           <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16 lg:gap-24">
             {/* Left — EP cover, large */}
-            <div className="w-full max-w-[360px] shrink-0 md:max-w-none md:w-[45%]">
+            <div className="w-full shrink-0 md:w-[45%]">
               <Image
                 src="/cover-images/ColeGoodwin_HowdyEP_CoverArt.jpg"
                 alt="Howdy EP cover art"
                 width={800}
                 height={800}
-                sizes="(max-width: 768px) 360px, 45vw"
+                sizes="(max-width: 768px) 100vw, 45vw"
                 className="w-full rounded-xl shadow-[10px_10px_0_rgba(0,0,0,0.3)]"
               />
             </div>
 
             {/* Right — EP info + track strip */}
-            <div className="flex flex-1 flex-col items-center md:items-start">
+            <div className="flex w-full flex-1 flex-col items-center md:items-start">
               <h1
-                className="text-center text-5xl [transform-origin:center_center] md:text-left md:text-6xl md:[transform-origin:left_center] lg:text-7xl"
+                className="text-center text-5xl ![transform-origin:center_center] md:text-left md:text-6xl md:![transform-origin:left_center] lg:text-7xl"
               >
-                The Howdy EP
+                Howdy EP
               </h1>
               <p className="mt-3 text-base uppercase tracking-[0.2em] text-cream/60 md:mt-4 md:text-lg">
                 Out June 26, 2026
@@ -97,7 +97,7 @@ export default function MusicPage() {
                 rel="noopener noreferrer"
                 className="btn-listen mt-8 px-12 py-4 text-lg md:mt-10 md:px-14 md:py-5 md:text-xl"
               >
-                Pre-save the EP
+                Pre-save Howdy EP
               </a>
 
               {/* Track strip — visual tracklist */}
@@ -105,14 +105,14 @@ export default function MusicPage() {
                 <p className="mb-3 text-xs uppercase tracking-[0.15em] text-cream/40 md:text-sm">
                   Tracklist
                 </p>
-                <div className="grid grid-cols-5 gap-2 md:gap-3">
-                  {EP_TRACKS.map((track) => (
+                <div className="flex flex-wrap justify-center gap-2 md:grid md:grid-cols-5 md:gap-3">
+                  {EP_TRACKS.map((track, i) => (
                     <a
                       key={track.num}
                       href={track.url}
                       target={track.url !== "#" ? "_blank" : undefined}
                       rel={track.url !== "#" ? "noopener noreferrer" : undefined}
-                      className="group relative aspect-square overflow-hidden rounded-md"
+                      className="group relative aspect-square w-[calc(33.333%-0.375rem)] overflow-hidden rounded-md md:w-auto"
                       aria-label={`${track.title}${track.released ? " — Listen" : " — Pre-save"}`}
                     >
                       {track.cover ? (
@@ -120,7 +120,7 @@ export default function MusicPage() {
                           src={track.cover}
                           alt={track.title}
                           fill
-                          sizes="(max-width: 768px) 60px, 120px"
+                          sizes="(max-width: 768px) 30vw, 120px"
                           className="object-cover transition-transform duration-150 group-hover:scale-105"
                         />
                       ) : (
@@ -189,7 +189,7 @@ export default function MusicPage() {
       <section className="music-section music-section-hidden px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-3xl">
           <div className="mb-10 text-center md:mb-14">
-            <h2 style={centeredHeadline}>Listen Everywhere</h2>
+            <h2 style={centeredHeadline}>Listen<br className="md:hidden" /> Everywhere</h2>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-5">
@@ -207,6 +207,6 @@ export default function MusicPage() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }
