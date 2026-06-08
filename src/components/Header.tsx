@@ -32,6 +32,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [forceTransparent, setForceTransparent] = useState(false);
+  const [suppressTransition, setSuppressTransition] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
 
@@ -47,11 +48,16 @@ export default function Header() {
     }
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Immediately hide logo on home before paint
+  // Immediately hide logo on home before paint — no transition
   useLayoutEffect(() => {
     if (isHome) {
+      setSuppressTransition(true);
       setPastHero(false);
       setScrolled(false);
+      // Re-enable transitions after the frame paints
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setSuppressTransition(false));
+      });
     }
   }, [isHome]);
 
@@ -193,7 +199,7 @@ export default function Header() {
               : "-translate-x-12 opacity-0 pointer-events-none"
           }`}
           style={{
-            transition: reducedMotion
+            transition: reducedMotion || suppressTransition
               ? "none"
               : "transform 400ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
@@ -373,13 +379,14 @@ export default function Header() {
                 href={link.href}
                 onClick={handleNavClick}
                 aria-current={isActive ? "page" : undefined}
-                className={`block uppercase tracking-wider transition-all hover:text-rust ${isActive ? "text-rust" : "text-cream"}
+                className={`block uppercase tracking-wider hover:text-rust ${isActive ? "text-rust" : "text-cream"}
                   text-4xl py-3
                   md:text-5xl md:py-4
                   lg:text-6xl lg:py-5
                   ${menuVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
                 style={{
                   fontFamily: "var(--font-headline)",
+                  transitionProperty: "transform, opacity, color",
                   transitionDelay: menuVisible ? `${150 + i * 60}ms` : "0ms",
                   transitionDuration: reducedMotion ? "0ms" : "400ms",
                   transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
@@ -395,9 +402,10 @@ export default function Header() {
             rel="noopener noreferrer"
             aria-label="Pre-save Howdy EP — opens in a new tab"
             onClick={handleNavClick}
-            className={`btn-presave mt-6 text-lg transition-all bg-rust text-cream md:text-xl
+            className={`btn-presave mt-6 text-lg bg-rust text-cream md:text-xl
               ${menuVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
             style={{
+              transitionProperty: "transform, opacity",
               transitionDelay: menuVisible ? `${150 + MOBILE_MENU_LINKS.length * 60}ms` : "0ms",
               transitionDuration: reducedMotion ? "0ms" : "400ms",
               transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",

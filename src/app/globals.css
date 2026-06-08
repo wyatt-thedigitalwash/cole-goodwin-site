@@ -879,7 +879,8 @@ section[data-bg="cream"] + section[data-bg="cream"] {
 }
 
 /* ── Scrollbar ────────────────────────────────────────── */
-html {
+html,
+body {
   scroll-behavior: auto;
   scroll-padding-top: 5rem;
   overflow-x: hidden;
