@@ -127,7 +127,7 @@ export default function VideosPageClient({
                       </div>
 
                       <h2
-                        className="mt-4 text-center text-lg md:text-xl"
+                        className="mt-4 text-center !text-lg md:!text-xl"
                         style={centeredHeadline}
                       >
                         {title}

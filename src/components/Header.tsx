@@ -193,15 +193,15 @@ export default function Header() {
           href="/"
           aria-label="Cole Goodwin — home"
           onClick={handleNavClick}
-          className={`will-change-[transform,opacity] ${
+          className={`${
             pastHero
-              ? "translate-x-0 opacity-100"
-              : "-translate-x-12 opacity-0 pointer-events-none"
+              ? "opacity-100"
+              : "opacity-0 pointer-events-none"
           }`}
           style={{
             transition: reducedMotion || suppressTransition
               ? "none"
-              : "transform 400ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms cubic-bezier(0.22, 1, 0.36, 1)",
+              : "opacity 300ms ease",
           }}
         >
           <Image
