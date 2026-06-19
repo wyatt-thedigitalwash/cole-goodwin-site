@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Hero from "@/components/Hero";
 import EPSection from "@/components/EPSection";
 import VideoBanner from "@/components/VideoBanner";
@@ -13,28 +12,7 @@ export default async function Home() {
 
   return (
     <main id="main-content" className="flex-1">
-      <div className="relative bg-brown">
-        {/* Background texture for Hero only */}
-        <Image
-          src="/backgrounds/HowdyBackground_Landscape.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="hidden object-cover opacity-35 md:block"
-          priority
-        />
-        <Image
-          src="/backgrounds/HowdyBackground_Portrait.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover opacity-35 md:hidden"
-          priority
-        />
-        <div className="relative z-10">
-          <Hero />
-        </div>
-      </div>
+      <Hero />
       <VideoBanner />
       <EPSection />
       <TourSection events={events} />
