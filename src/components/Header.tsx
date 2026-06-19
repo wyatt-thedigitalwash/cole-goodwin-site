@@ -32,6 +32,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [forceTransparent, setForceTransparent] = useState(false);
+  const [overCream, setOverCream] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
 
@@ -87,6 +88,29 @@ export default function Header() {
       return () => window.removeEventListener("scroll", onScroll);
     }
   }, [pathname, isHome]);
+
+  // Detect when header overlaps a cream-background section
+  useEffect(() => {
+    function checkOverCream() {
+      const headerHeight = 60;
+      const probeY = headerHeight / 2;
+      const sections = document.querySelectorAll<HTMLElement>("[data-bg]");
+      let cream = false;
+      for (const section of sections) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= probeY && rect.bottom >= probeY) {
+          if (section.dataset.bg === "cream") {
+            cream = true;
+          }
+          break;
+        }
+      }
+      setOverCream(cream);
+    }
+    checkOverCream();
+    window.addEventListener("scroll", checkOverCream, { passive: true });
+    return () => window.removeEventListener("scroll", checkOverCream);
+  }, [pathname]);
 
   // Escape key closes menu
   useEffect(() => {
@@ -161,7 +185,7 @@ export default function Header() {
   // On home, logo only shows after scrolling past hero (pastHero && isHome means scrolled past)
   // On other pages, logo always shows (pastHero is true)
   // Key: if isHome and we haven't scrolled past hero yet, ALWAYS hide — no transition
-  const showLogo = isHome ? pastHero && scrolled : pastHero;
+  const showLogo = isHome ? (pastHero && scrolled) || overCream : pastHero;
   const hamburgerHidden = pastHero;
   const showChrome = (scrolled || menuVisible) && !forceTransparent;
 
@@ -172,7 +196,7 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow,border-color] ${dur} ${
-        showChrome
+        showChrome || overCream
           ? "bg-brown shadow-[0_3px_8px_rgba(0,0,0,0.18)] border-b border-[rgba(249,240,227,0.15)]"
           : "bg-transparent shadow-none border-b border-transparent"
       }`}
@@ -244,10 +268,10 @@ export default function Header() {
                     }`}
                     style={{
                       fontFamily: "var(--font-headline)",
+                      transitionProperty: reducedMotion ? "none" : "transform, opacity",
+                      transitionDuration: reducedMotion ? "0ms" : "400ms",
+                      transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
                       transitionDelay: delay,
-                      transition: reducedMotion
-                        ? "none"
-                        : `transform 400ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms cubic-bezier(0.22, 1, 0.36, 1)`,
                     }}
                   >
                     {link.label}

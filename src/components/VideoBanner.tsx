@@ -27,7 +27,7 @@ export default function VideoBanner() {
           }
         });
       },
-      { threshold: 0.25 }
+      { threshold: 0.1 }
     );
 
     videos.forEach((v) => observer.observe(v));
@@ -35,12 +35,11 @@ export default function VideoBanner() {
   }, []);
 
   return (
-    <div className="w-full">
-      {/* Desktop video */}
+    <div className="relative w-full overflow-hidden" style={{ height: "60vh" }}>
+      {/* Desktop video — parallax via object-position shift */}
       <video
         ref={desktopRef}
-        className="hidden w-full md:block"
-        style={{ aspectRatio: "1920 / 675" }}
+        className="parallax-video hidden md:block"
         muted
         loop
         playsInline
@@ -58,11 +57,10 @@ export default function VideoBanner() {
         />
       </video>
 
-      {/* Mobile video */}
+      {/* Mobile video — parallax via object-position shift */}
       <video
         ref={mobileRef}
-        className="block w-full md:hidden"
-        style={{ aspectRatio: "1920 / 810" }}
+        className="parallax-video block md:hidden"
         muted
         loop
         playsInline

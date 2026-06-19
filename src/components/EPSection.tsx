@@ -55,16 +55,12 @@ export default function EPSection() {
     <section
       ref={sectionRef}
       id="the-ep"
-      className="ep-section bg-brown px-5 py-28 md:px-8 md:py-36"
+      className="ep-section relative bg-brown px-5 py-28 md:px-8 md:py-36"
       data-bg="brown"
     >
       <div className="mx-auto max-w-7xl">
-        {/* Heading */}
         <div className="mb-14 flex flex-col items-center md:mb-20">
-          <h2 className="ep-anim-heading" style={centeredHeadline}>The EP</h2>
-          <p className="ep-anim-subline mt-3 text-sm uppercase tracking-[0.2em] text-cream/70 md:text-base">
-            Out June 26, 2026
-          </p>
+          <h2 className="ep-anim-heading" style={centeredHeadline}>Latest Releases</h2>
         </div>
 
         {/* Songs */}

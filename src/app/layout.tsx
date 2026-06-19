@@ -3,6 +3,8 @@ import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
+import SplashProvider from "@/components/SplashContext";
+import LayoutShell from "@/components/LayoutShell";
 import "./globals.css";
 
 const SITE_URL = "https://colegoodwinmusic.com";
@@ -52,6 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head />
       <Script id="gtm-init" strategy="afterInteractive">
         {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -59,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-57H5TG35');`}
       </Script>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-rust focus:px-4 focus:py-2 focus:text-cream focus:shadow-lg"
@@ -104,9 +107,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <Header />
-        <PageTransition>{children}</PageTransition>
-        <Footer />
+        <SplashProvider>
+          <LayoutShell>
+            <Header />
+            <PageTransition>{children}</PageTransition>
+            <Footer />
+          </LayoutShell>
+        </SplashProvider>
       </body>
     </html>
   );

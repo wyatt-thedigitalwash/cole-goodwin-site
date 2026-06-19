@@ -153,15 +153,17 @@ export default function VideosPageClient({
         </div>
 
         {/* Right column — sticky banner, unpins when left content ends */}
-        <div className="relative hidden md:block md:w-1/2 md:self-start md:sticky md:top-0 md:h-screen">
-          <Image
-            src="/banners/ColeGoodwin_HowdySingle_DesktopBanner.jpg"
-            alt="Cole Goodwin"
-            fill
-            sizes="50vw"
-            className="object-cover"
-            priority
-          />
+        <div className="hidden md:block md:w-1/2 md:self-start md:sticky md:top-0 md:h-screen">
+          <div className="relative h-full w-full">
+            <Image
+              src="/banners/ColeGoodwin_HowdySingle_DesktopBanner.jpg"
+              alt="Cole Goodwin"
+              fill
+              sizes="50vw"
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
       </div>
     </main>

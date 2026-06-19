@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import TourPageClient from "@/components/TourPageClient";
+import { getTourEvents } from "@/lib/bandsintown";
+import TourList from "@/components/TourList";
+import TourPageShell from "@/components/TourPageShell";
 
 export const metadata: Metadata = {
   title: "Tour",
@@ -22,6 +24,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Tour() {
-  return <TourPageClient />;
+export default async function Tour() {
+  const events = await getTourEvents();
+
+  return (
+    <TourPageShell>
+      <TourList events={events} theme="dark" layout="narrow" />
+    </TourPageShell>
+  );
 }
