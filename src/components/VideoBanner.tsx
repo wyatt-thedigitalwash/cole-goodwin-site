@@ -35,7 +35,7 @@ export default function VideoBanner() {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ height: "60vh" }}>
+    <div className="relative -mt-px w-full overflow-hidden" style={{ height: "60vh" }}>
       {/* Desktop video — parallax via object-position shift */}
       <video
         ref={desktopRef}

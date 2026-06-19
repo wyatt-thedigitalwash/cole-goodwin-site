@@ -34,12 +34,18 @@ body {
   transform-origin: left center;
 }
 
-/* ── Type scale ───────────────────────────────────────── */
-/* Body base: 1rem (16px). Headlines min 30% larger. */
-h1 { font-size: 3rem;    line-height: 1.1; }
-h2 { font-size: 3.375rem; line-height: 1.1; }
-h3 { font-size: 1.75rem; line-height: 1.2; }
-h4 { font-size: 1.375rem; line-height: 1.25; }
+/* ── Type scale (mobile-first, scales up at md) ──────── */
+h1 { font-size: 2.5rem;   line-height: 1.1; }
+h2 { font-size: 2.125rem; line-height: 1.1; }
+h3 { font-size: 1.5rem;   line-height: 1.2; }
+h4 { font-size: 1.25rem;  line-height: 1.25; }
+
+@media (min-width: 768px) {
+  h1 { font-size: 3.25rem; }
+  h2 { font-size: 2.75rem; }
+  h3 { font-size: 1.75rem; }
+  h4 { font-size: 1.375rem; }
+}
 
 h1, h2, h3, h4 {
   font-family: var(--font-headline);

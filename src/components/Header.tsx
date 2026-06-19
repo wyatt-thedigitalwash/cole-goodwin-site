@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { label: "Tour", href: "/tour" },
   { label: "Videos", href: "/videos" },
   { label: "Follow Along", href: "/follow" },
+  { label: "Sign Up", href: "/sign-up" },
 ];
 
 const MOBILE_MENU_LINKS = [
@@ -94,18 +95,15 @@ export default function Header() {
     function checkOverCream() {
       const headerHeight = 60;
       const probeY = headerHeight / 2;
-      const sections = document.querySelectorAll<HTMLElement>("[data-bg]");
-      let cream = false;
-      for (const section of sections) {
-        const rect = section.getBoundingClientRect();
+      const elements = document.querySelectorAll<HTMLElement>("[data-bg]");
+      let match: string | null = null;
+      for (const el of elements) {
+        const rect = el.getBoundingClientRect();
         if (rect.top <= probeY && rect.bottom >= probeY) {
-          if (section.dataset.bg === "cream") {
-            cream = true;
-          }
-          break;
+          match = el.dataset.bg ?? null;
         }
       }
-      setOverCream(cream);
+      setOverCream(match === "cream");
     }
     checkOverCream();
     window.addEventListener("scroll", checkOverCream, { passive: true });
@@ -182,10 +180,8 @@ export default function Header() {
   const dur = reducedMotion ? "duration-0" : "duration-[400ms]";
   const durFast = reducedMotion ? "duration-0" : "duration-200";
 
-  // On home, logo only shows after scrolling past hero (pastHero && isHome means scrolled past)
-  // On other pages, logo always shows (pastHero is true)
-  // Key: if isHome and we haven't scrolled past hero yet, ALWAYS hide — no transition
-  const showLogo = isHome ? (pastHero && scrolled) || overCream : pastHero;
+  // Logo always visible except when on the home hero (before scrolling past it)
+  const showLogo = isHome ? pastHero || scrolled || overCream : true;
   const hamburgerHidden = pastHero;
   const showChrome = (scrolled || menuVisible) && !forceTransparent;
 

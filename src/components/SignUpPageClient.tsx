@@ -51,7 +51,7 @@ export default function SignUpPageClient() {
   }, []);
 
   return (
-    <main id="main-content" ref={pageRef} className="flex-1 bg-cream pt-28 text-brown md:pt-32">
+    <main id="main-content" ref={pageRef} className="flex-1 bg-cream pt-28 text-brown md:pt-32" data-bg="cream">
       {/* Section 1: Page hero */}
       <section className="su-section su-section-hidden px-5 pb-10 text-center md:px-8 md:pb-16">
         <h1 style={centeredHeadline} className="text-brown">
