@@ -13,10 +13,7 @@ const NAV_LINKS = [
   { label: "Sign Up", href: "/sign-up" },
 ];
 
-const MOBILE_MENU_LINKS = [
-  ...NAV_LINKS,
-  { label: "Sign Up", href: "/sign-up" },
-];
+const MOBILE_MENU_LINKS = [...NAV_LINKS];
 
 const NAV_LINKS_REVERSED = [...NAV_LINKS].reverse();
 
