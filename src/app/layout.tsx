@@ -54,7 +54,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <head />
+      <head>
+          <link rel="stylesheet" href="https://use.typekit.net/iln0apa.css" />
+        </head>
       <Script id="gtm-init" strategy="afterInteractive">
         {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
