@@ -66,6 +66,7 @@ export default function Hero() {
         sizes="100vw"
         className="object-cover md:hidden"
         priority
+        unoptimized
       />
       {/* Landscape background (desktop) */}
       <Image
@@ -75,6 +76,7 @@ export default function Hero() {
         sizes="100vw"
         className="hidden object-cover md:block"
         priority
+        unoptimized
       />
       <h1 className="sr-only">Cole Goodwin - Howdy EP</h1>
 
