@@ -17,7 +17,7 @@ const MOBILE_MENU_LINKS = [...NAV_LINKS];
 
 const NAV_LINKS_REVERSED = [...NAV_LINKS].reverse();
 
-const PRESAVE_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
+const LISTEN_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
 
 const HAMBURGER_SHIFT = "-54px";
 
@@ -275,13 +275,13 @@ export default function Header() {
 
             {/* Pre-Save button */}
             <a
-              href={PRESAVE_URL}
+              href={LISTEN_URL}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Pre-save Howdy EP — opens in a new tab"
+              aria-label="Listen to Howdy EP -- opens in a new tab"
               className="btn-presave relative z-20 shrink-0"
             >
-              Pre-save
+              Listen Now
             </a>
           </div>
 
@@ -404,10 +404,10 @@ export default function Header() {
             );
           })}
           <a
-            href={PRESAVE_URL}
+            href={LISTEN_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Pre-save Howdy EP — opens in a new tab"
+            aria-label="Listen to Howdy EP -- opens in a new tab"
             onClick={handleNavClick}
             className={`btn-presave mt-6 text-lg bg-rust text-cream md:text-xl
               ${menuVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
@@ -418,7 +418,7 @@ export default function Header() {
               transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
             }}
           >
-            Pre-save
+            Listen Now
           </a>
         </nav>
       )}

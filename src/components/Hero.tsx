@@ -102,7 +102,7 @@ export default function Hero() {
 
         <div className={`${animate ? "hero-reveal-cta" : "opacity-0"} mt-8 flex flex-col items-center`}>
           <p className="mb-3 font-headline text-2xl uppercase tracking-wide !text-cream lg:hidden" style={{ transformOrigin: "center center" }}>
-            Out June 26
+            Out Now
           </p>
           <a
             href="https://colegoodwin.ffm.to/howdyep.OPR"
@@ -110,7 +110,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="btn-listen whitespace-nowrap px-14 py-4 text-lg"
           >
-            Pre-save Howdy EP
+            Listen to Howdy EP
           </a>
         </div>
 
@@ -195,9 +195,9 @@ export default function Hero() {
                 className="font-headline text-3xl leading-tight tracking-wide lg:text-4xl xl:text-5xl"
                 style={{ textTransform: "uppercase" }}
               >
-                Out June 26
+                Out Now
                 <br />
-                Pre-save Now
+                Listen Now
               </p>
             </a>
           </div>

@@ -59,7 +59,7 @@ export default function EPTracklist() {
       <div className="ep-block ep-block-hidden mb-14 text-center md:mb-20">
         <h2>The Howdy EP</h2>
         <p className="mt-3 text-sm uppercase tracking-[0.2em] text-cream/70 md:text-base">
-          Out June 26, 2026
+          Out Now
         </p>
       </div>
 

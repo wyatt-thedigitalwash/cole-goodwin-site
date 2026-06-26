@@ -7,15 +7,7 @@ const centeredHeadline: React.CSSProperties = {
   transformOrigin: "center center",
 };
 
-const PRESAVE_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
-
-const EP_TRACKS = [
-  { num: 1, title: "Howdy", released: true, url: "https://colegoodwin.lnk.to/howdyWE", cover: "/cover-images/ColeGoodwin_Howdy_CoverArt.jpg" },
-  { num: 2, title: "Girl That\u2019s How", released: true, url: "#", cover: "/cover-images/ColeGoodwin_GirlThatsHow_CoverArt.jpg" },
-  { num: 3, title: "Where She\u2019s Coming From", released: true, url: "https://colegoodwin.ffm.to/whereshescomingfrom", cover: "/cover-images/ColeGoodwin_WhereShesComingFrom_CoverArt.jpg" },
-  { num: 4, title: "Call Me Colorado", released: false, url: PRESAVE_URL, cover: null },
-  { num: 5, title: "Keep on Rainin\u2019", released: false, url: PRESAVE_URL, cover: null },
-];
+const LISTEN_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
 
 const SINGLES = [
   { title: "Girl That\u2019s How", url: "#", cover: "/cover-images/ColeGoodwin_GirlThatsHow_CoverArt.jpg" },
@@ -87,61 +79,19 @@ export default function MusicPage() {
                 Howdy EP
               </h1>
               <p className="mt-3 text-base uppercase tracking-[0.2em] text-cream/60 md:mt-4 md:text-lg">
-                Out June 26, 2026
+                Out Now
               </p>
 
-              {/* Pre-save button */}
+              {/* Listen button */}
               <a
-                href={PRESAVE_URL}
+                href={LISTEN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-listen mt-8 px-12 py-4 text-lg md:mt-10 md:px-14 md:py-5 md:text-xl"
               >
-                Pre-save Howdy EP
+                Listen to Howdy EP
               </a>
 
-              {/* Track strip — visual tracklist */}
-              <div className="mt-12 w-full md:mt-14">
-                <p className="mb-3 text-xs uppercase tracking-[0.15em] text-cream/40 md:text-sm">
-                  Tracklist
-                </p>
-                <div className="flex flex-wrap justify-center gap-2 md:grid md:grid-cols-5 md:gap-3">
-                  {EP_TRACKS.map((track, i) => (
-                    <a
-                      key={track.num}
-                      href={track.url}
-                      target={track.url !== "#" ? "_blank" : undefined}
-                      rel={track.url !== "#" ? "noopener noreferrer" : undefined}
-                      className="group relative aspect-square w-[calc(33.333%-0.375rem)] overflow-hidden rounded-md md:w-auto"
-                      aria-label={`${track.title}${track.released ? " — Listen" : " — Pre-save"}`}
-                    >
-                      {track.cover ? (
-                        <Image
-                          src={track.cover}
-                          alt={track.title}
-                          fill
-                          sizes="(max-width: 768px) 30vw, 120px"
-                          className="object-cover transition-transform duration-150 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full flex-col items-center justify-center bg-black/40">
-                          <span
-                            className="text-center text-xs uppercase leading-tight text-cream/50 md:text-sm"
-                            style={{ fontFamily: "var(--font-headline)", fontWeight: 700 }}
-                          >
-                            Coming
-                            <br />
-                            Soon
-                          </span>
-                        </div>
-                      )}
-                      <span className="absolute bottom-1 left-1.5 text-[10px] font-bold text-cream/60 md:text-xs">
-                        {track.num}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>

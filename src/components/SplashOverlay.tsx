@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useSplash } from "./SplashContext";
 
-const PRESAVE_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
+const LISTEN_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
 
 export default function SplashOverlay() {
   const { state, dismiss } = useSplash();
@@ -164,13 +164,13 @@ export default function SplashOverlay() {
                 textTransform: "uppercase",
               }}
             >
-              Available June 26
+              Out Now
             </h2>
 
-            {/* Pre-save button */}
+            {/* Listen button */}
             <a
               ref={presaveRef}
-              href={PRESAVE_URL}
+              href={LISTEN_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={dismiss}
@@ -192,9 +192,9 @@ export default function SplashOverlay() {
                 e.currentTarget.style.transform = "translate(0, 0)";
                 e.currentTarget.style.boxShadow = "4px 4px 0 #000";
               }}
-              aria-label="Pre-save Howdy EP — opens in a new tab"
+              aria-label="Listen to Howdy EP now -- opens in a new tab"
             >
-              Pre-save Howdy EP
+              Listen Now
             </a>
 
             {/* Enter site button */}

@@ -10,7 +10,7 @@ const centeredHeadline: React.CSSProperties = {
 const BIO_PARAGRAPHS = [
   `24-year-old singer/songwriter Cole Goodwin has garnered attention for his strong, textured voice paired with his meaningful writing and return to old-school Country sound. The Pooler, Georgia, native burst on the scene in 2023 with the release of his original, self-produced EP Soon Enough. Cole has toured the Southeast playing honky tonks, clubs and festivals, as well as opening shows for artists including Zach Top and Billy Currington.`,
   `Last year, the up-and-coming artist released what are now fan-favorite songs including "When You Get Home," co-written with fellow Georgia Southern University alum Will Moseley, and "Catchin' On," written with songwriter Justin Dukes. Cole was voted Savannah's Best Country Artist of 2023 and 2024, as well as 2024's Best Singer/Songwriter, Best Local Concert, and Best All-Around Musician.`,
-  `Recently signed to Big Machine Records, more new music from Cole is expected throughout the summer as he crisscrosses the country opening on select dates of Luke Bryan's Country Song Came On Tour. Cole's new EP, Howdy, arrives June 26, 2026.`,
+  `Recently signed to Big Machine Records, more new music from Cole is expected throughout the summer as he crisscrosses the country opening on select dates of Luke Bryan's Country Song Came On Tour. Cole's new EP, Howdy, is out now.`,
 ];
 
 export default function AboutSection() {

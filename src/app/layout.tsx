@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Cole Goodwin",
   },
   description:
-    "The official site of country artist Cole Goodwin. New EP, Howdy, out June 26, 2026. Tour dates, music, videos and more.",
+    "The official site of country artist Cole Goodwin. New EP, Howdy, out now. Tour dates, music, videos and more.",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
@@ -29,14 +29,14 @@ export const metadata: Metadata = {
     url: SITE_URL,
     title: "Cole Goodwin | Country Artist from Pooler, Georgia",
     description:
-      "The official site of country artist Cole Goodwin. New EP, Howdy, out June 26, 2026. Tour dates, music, videos and more.",
+      "The official site of country artist Cole Goodwin. New EP, Howdy, out now. Tour dates, music, videos and more.",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Cole Goodwin | Country Artist from Pooler, Georgia",
     description:
-      "The official site of country artist Cole Goodwin. New EP, Howdy, out June 26, 2026. Tour dates, music, videos and more.",
+      "The official site of country artist Cole Goodwin. New EP, Howdy, out now. Tour dates, music, videos and more.",
     images: ["/og-image.png"],
   },
   alternates: {
@@ -80,7 +80,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               name: "Cole Goodwin",
               url: SITE_URL,
               description:
-                "Country artist from Pooler, Georgia. Signed to Big Machine Records. New EP, Howdy, out June 26, 2026.",
+                "Country artist from Pooler, Georgia. Signed to Big Machine Records. New EP, Howdy, out now.",
               genre: "Country",
               image: `${SITE_URL}/og-image.png`,
               sameAs: [
