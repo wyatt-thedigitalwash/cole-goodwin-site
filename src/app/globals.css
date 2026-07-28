@@ -8,6 +8,15 @@
 
   --font-headline: Impact, 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
   --font-body: 'Eurostile', 'Eurostile LT Std', Arial, sans-serif;
+
+  /* Semantic tokens consumed by the ported legal / consent components.
+     Mapped to the Cole Goodwin palette: brown surfaces, cream text, rust
+     accent for interactive elements. */
+  --background-primary: #493629;
+  --background-alt: #493629;
+  --text-header: #F9F0E3;
+  --text-body: #F9F0E3;
+  --text-accent: #F9F0E3;
 }
 
 @theme inline {
@@ -16,6 +25,14 @@
   --color-rust:  var(--color-rust);
   --font-headline: var(--font-headline);
   --font-body: var(--font-body);
+
+  /* Aliases so the ported legal/consent components resolve to Cole's system */
+  --color-background-primary: var(--background-primary);
+  --color-background-alt: var(--background-alt);
+  --color-text-header: var(--text-header);
+  --color-text-body: var(--text-body);
+  --color-text-accent: var(--text-accent);
+  --font-display: var(--font-headline);
 }
 
 /* ── Base ─────────────────────────────────────────────── */
@@ -857,6 +874,79 @@ nav a:hover {
 }
 .prose-privacy strong {
   color: var(--color-cream);
+}
+
+/* ── Legal / policy pages (ported /legal components) ──────
+   Links inside legal copy use the site's rust accent, underlined, matching
+   the site-wide link treatment. */
+.legal-prose a {
+  color: var(--color-rust);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: opacity 200ms;
+  word-break: break-word;
+}
+.legal-prose a:hover {
+  opacity: 0.7;
+}
+
+/* ── Legal / policy pages: inverted for readability ───────
+   Client-requested override. The default site palette renders these pages as
+   brown surfaces with cream text, which is hard to read for long-form legal
+   copy. Scoped to the .cg-legal wrapper on the legal hub and policy sections,
+   we flip the semantic tokens so the same bg-background-primary / text-text-*
+   utilities inside resolve to a cream background with brown body + headings.
+   Links keep the site's rust accent. Nothing outside .cg-legal is affected. */
+.cg-legal {
+  --background-primary: #f9f0e3; /* cream */
+  --background-alt: #f9f0e3; /* cream */
+  --text-header: #493629; /* brown */
+  --text-body: #493629; /* brown */
+  --text-accent: #493629; /* brown */
+}
+.cg-legal .legal-prose a {
+  color: #b5502a; /* rust */
+}
+.cg-legal .legal-prose a:hover {
+  color: #8f3f21; /* darker rust, readable on cream */
+  opacity: 1;
+}
+
+/* ── Cookie consent / Terms gate buttons ─────────────────
+   Match the site's primary button: rust fill + cream text, lightly rounded
+   and flat. Ghost variant is transparent with a cream border. */
+.cc-btn {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 1.5rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid var(--color-rust);
+  transition: all 200ms;
+  cursor: pointer;
+}
+.cc-btn-primary {
+  background: var(--color-rust);
+  color: var(--color-cream);
+  border-color: var(--color-rust);
+}
+.cc-btn-primary:hover {
+  opacity: 0.9;
+}
+.cc-btn-ghost {
+  background: transparent;
+  color: var(--color-cream);
+  border-color: rgba(249, 240, 227, 0.6);
+}
+.cc-btn-ghost:hover {
+  background: var(--color-cream);
+  color: var(--color-brown);
 }
 
 /*

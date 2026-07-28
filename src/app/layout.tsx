@@ -5,6 +5,9 @@ import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import SplashProvider from "@/components/SplashContext";
 import LayoutShell from "@/components/LayoutShell";
+import AnchorScroll from "@/components/shared/AnchorScroll";
+import CookieConsent from "@/components/consent/CookieConsent";
+import TermsGate from "@/components/consent/TermsGate";
 import "./globals.css";
 
 const SITE_URL = "https://colegoodwinmusic.com";
@@ -71,6 +74,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         >
           Skip to main content
         </a>
+        <AnchorScroll />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -115,6 +119,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <PageTransition>{children}</PageTransition>
             <Footer />
           </LayoutShell>
+          {/* Cookie consent banner. Gated on the splash state so it never
+              stacks on the splash overlay; persisted in localStorage; injects
+              nothing before consent is granted. */}
+          <CookieConsent />
+          {/* Arbitration / class-action notice, shown once right after the
+              cookie decision so it is never buried only in the footer. */}
+          <TermsGate />
         </SplashProvider>
       </body>
     </html>

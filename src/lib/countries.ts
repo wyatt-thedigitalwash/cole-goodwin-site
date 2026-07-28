@@ -1,4 +1,9 @@
-export const COUNTRIES: string[] = [
+// Country names for the subscribe form. "United States" is first (the default
+// selection); the rest follow alphabetically. Strings must match exactly --
+// SMS_COUNTRIES in subscribe-validation.ts compares against "United States"
+// and "Canada".
+export const COUNTRIES = [
+  "United States",
   "Afghanistan",
   "Albania",
   "Algeria",
@@ -37,8 +42,7 @@ export const COUNTRIES: string[] = [
   "China",
   "Colombia",
   "Comoros",
-  "Congo (Democratic Republic)",
-  "Congo (Republic)",
+  "Congo",
   "Costa Rica",
   "Croatia",
   "Cuba",
@@ -48,7 +52,6 @@ export const COUNTRIES: string[] = [
   "Djibouti",
   "Dominica",
   "Dominican Republic",
-  "East Timor",
   "Ecuador",
   "Egypt",
   "El Salvador",
@@ -82,7 +85,6 @@ export const COUNTRIES: string[] = [
   "Ireland",
   "Israel",
   "Italy",
-  "Ivory Coast",
   "Jamaica",
   "Japan",
   "Jordan",
@@ -175,6 +177,7 @@ export const COUNTRIES: string[] = [
   "Tajikistan",
   "Tanzania",
   "Thailand",
+  "Timor-Leste",
   "Togo",
   "Tonga",
   "Trinidad and Tobago",
@@ -186,7 +189,6 @@ export const COUNTRIES: string[] = [
   "Ukraine",
   "United Arab Emirates",
   "United Kingdom",
-  "United States",
   "Uruguay",
   "Uzbekistan",
   "Vanuatu",

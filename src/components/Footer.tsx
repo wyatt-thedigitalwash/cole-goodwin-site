@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import CookieChoicesLink from "@/components/legal/CookieChoicesLink";
 import {
   InstagramIcon,
   FacebookIcon,
@@ -22,10 +24,12 @@ const SOCIAL_LINKS = [
 ];
 
 const LEGAL_LINKS = [
-  { label: "Terms", href: "#", newTab: true },
-  { label: "Do Not Sell My Personal Information", href: "/privacy", newTab: false },
-  { label: "Privacy", href: "/privacy", newTab: false },
-  { label: "Cookie Choices", href: "/privacy#cookies-policy", newTab: false },
+  { label: "Terms", href: "/legal/terms" },
+  { label: "Privacy", href: "/legal/privacy" },
+  { label: "Copyright (DMCA)", href: "/legal/dmca" },
+  { label: "Cybersecurity", href: "/legal/cybersecurity" },
+  { label: "TCPA", href: "/legal/tcpa" },
+  { label: "Do Not Sell My Personal Information", href: "/legal/privacy#s10-2" },
 ];
 
 export default function Footer() {
@@ -75,17 +79,19 @@ export default function Footer() {
                 {i > 0 && (
                   <span style={{ color: "rgba(249,240,227,0.4)" }}>/</span>
                 )}
-                <a
+                <Link
                   href={link.href}
-                  target={link.newTab ? "_blank" : undefined}
-                  rel={link.newTab ? "noopener noreferrer" : undefined}
                   style={{ color: "rgba(249,240,227,0.8)" }}
                   className="underline transition-opacity hover:opacity-70"
                 >
                   {link.label}
-                </a>
+                </Link>
               </span>
             ))}
+            <span className="flex items-center gap-1">
+              <span style={{ color: "rgba(249,240,227,0.4)" }}>/</span>
+              <CookieChoicesLink className="text-cream/80 underline transition-opacity hover:opacity-70" />
+            </span>
           </div>
         </div>
       </div>

@@ -24,6 +24,10 @@ const HAMBURGER_SHIFT = "-54px";
 export default function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  // The legal pages render on a cream background, but the header's nav + logo
+  // are cream and normally sit on a transparent bar, so force the solid brown
+  // header there to keep them legible.
+  const isLegal = pathname.startsWith("/legal");
 
   const [pastHero, setPastHero] = useState(!isHome);
   const [scrolled, setScrolled] = useState(false);
@@ -189,7 +193,7 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow,border-color] ${dur} ${
-        showChrome || overCream
+        showChrome || overCream || isLegal
           ? "bg-brown shadow-[0_3px_8px_rgba(0,0,0,0.18)] border-b border-[rgba(249,240,227,0.15)]"
           : "bg-transparent shadow-none border-b border-transparent"
       }`}
