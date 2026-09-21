@@ -47,14 +47,7 @@ export default function VideoBanner() {
         poster="/video/ColeGoodwin_VideoBanner_poster.jpg"
         aria-hidden="true"
       >
-        <source
-          src="/video/ColeGoodwin_VideoBanner.webm"
-          type="video/webm"
-        />
-        <source
-          src="/video/ColeGoodwin_VideoBanner.mp4"
-          type="video/mp4"
-        />
+        <source src="https://media.thedigitalwash.com/cole-goodwin/ColeGoodwin_VideoBanner.mp4" type="video/mp4" />
       </video>
 
       {/* Mobile video — parallax via object-position shift */}
@@ -68,14 +61,7 @@ export default function VideoBanner() {
         poster="/video/ColeGoodwin_Mobile_poster.jpg"
         aria-hidden="true"
       >
-        <source
-          src="/video/ColeGoodwin_Mobile.webm"
-          type="video/webm"
-        />
-        <source
-          src="/video/ColeGoodwin_Mobile.mp4"
-          type="video/mp4"
-        />
+        <source src="https://media.thedigitalwash.com/cole-goodwin/ColeGoodwin_Mobile.mp4" type="video/mp4" />
       </video>
     </div>
   );

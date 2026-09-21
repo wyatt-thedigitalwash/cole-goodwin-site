@@ -20,8 +20,7 @@ export default function TourPageShell({ children }: { children: ReactNode }) {
           poster="/video/ColeGoodwin_TourBanner_Square_poster.jpg"
           className="w-full"
         >
-          <source src="/video/ColeGoodwin_TourBanner_Square.webm" type="video/webm" />
-          <source src="/video/ColeGoodwin_TourBanner_Square.mp4" type="video/mp4" />
+          <source src="https://media.thedigitalwash.com/cole-goodwin/ColeGoodwin_TourBanner_Square.mp4" type="video/mp4" />
         </video>
         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-brown/80 to-transparent pb-8 pt-20">
           <h1 className="text-center text-[3.375rem]" style={centeredHeadline}>Tour</h1>
@@ -56,8 +55,7 @@ export default function TourPageShell({ children }: { children: ReactNode }) {
             poster="/video/ColeGoodwin_TourBanner_Square_poster.jpg"
             className="absolute inset-0 h-full w-full object-cover"
           >
-            <source src="/video/ColeGoodwin_TourBanner_Square.webm" type="video/webm" />
-            <source src="/video/ColeGoodwin_TourBanner_Square.mp4" type="video/mp4" />
+            <source src="https://media.thedigitalwash.com/cole-goodwin/ColeGoodwin_TourBanner_Square.mp4" type="video/mp4" />
           </video>
         </div>
       </div>
