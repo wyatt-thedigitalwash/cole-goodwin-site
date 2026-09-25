@@ -11,7 +11,7 @@ import {
   writeConsent,
 } from "./consent";
 import { applyConsent } from "./injectScripts";
-import { useSplash } from "@/components/SplashContext";
+import { useSplashEntered } from "./useSplashEntered";
 
 const NON_NECESSARY: Category[] = ["analytics", "advertising", "functional", "social"];
 
@@ -21,11 +21,10 @@ function now() {
 }
 
 export default function CookieConsent() {
-  // The splash provider exposes a "site" state once the overlay is gone (and
-  // the splash is currently disabled, so state is "site" immediately). Treat
-  // that as the signal that the visitor is "in" the site.
-  const { state } = useSplash();
-  const entered = state === "site";
+  // True only once the visitor has explicitly entered past the splash. A
+  // deep link to /legal hides the splash without entering, so the banner
+  // stays away there too (TermsGate offers the way in).
+  const entered = useSplashEntered();
   const [decided, setDecided] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [showModal, setShowModal] = useState(false);

@@ -1022,21 +1022,368 @@ body {
   overflow-x: clip;
 }
 
-/* ── No-flash splash visibility ──────────────────────── */
-/* Default: site visible, splash hidden (repeat visitors) */
-[data-splash-overlay] {
+/* ── Splash: "Closer Every Day" single ─────────────────
+   Full-screen title card shown once per browser session. The label banner
+   carries the title and signature lockup; the release date, buttons and legal
+   notice sit on top of it. State lives as a class on <html>, set before paint
+   by the inline script in the root layout. Colors are sampled from the
+   banner's own title type, splash only. */
+#splash-overlay {
+  --closer-tan: #DCC09C;
+  --closer-ink: #1B1410;
+
+  /* The stage mirrors object-fit: cover so the CTA can be pinned to the art.
+     --sw/--sh are the covered size, --sx/--sy the offset. The crop leans
+     toward the left and top, where the lockup sits, instead of centering.
+     Portrait art by default, landscape art from 5:4 up. */
+  --sw: max(100vw, 56.25dvh);
+  --sh: max(100dvh, 177.78vw);
+  --sx: calc((100vw - var(--sw)) * 0.2);
+  --sy: calc((100dvh - var(--sh)) * 0.35);
+
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: hidden;
+  background: var(--closer-ink);
+  opacity: 1;
+  transition: opacity 800ms ease;
+}
+#splash-overlay.is-exiting {
   opacity: 0;
   pointer-events: none;
 }
-[data-splash-site-wrapper] {
-  opacity: 1;
+html.splash-entered #splash-overlay,
+html.splash-exempt #splash-overlay {
+  display: none;
 }
-/* First visit: inline script adds data-show-splash, invert */
-html[data-show-splash="true"] [data-splash-overlay] {
-  opacity: 1;
-  pointer-events: auto;
+
+/* Lock scroll while the splash is up, but never on exempt (legal) routes.
+   Both elements: html carries overflow-x: clip (see Scrollbar above), which
+   stops body's overflow from propagating to the viewport, so a body-only lock
+   leaves the page scrolling underneath. overscroll-behavior kills the rubber
+   band on touch devices. */
+html:not(.splash-entered):not(.splash-exempt),
+html:not(.splash-entered):not(.splash-exempt) body {
+  overflow: hidden;
+  overscroll-behavior: none;
 }
-html[data-show-splash="true"] [data-splash-site-wrapper] {
+
+.splash-stage {
+  position: absolute;
+  left: var(--sx);
+  top: var(--sy);
+  width: var(--sw);
+  height: var(--sh);
+}
+.splash-art {
+  object-fit: cover;
   opacity: 0;
-  pointer-events: none;
+  transition: opacity 900ms ease;
+}
+.splash-ready .splash-art {
+  opacity: 1;
+}
+.splash-art-landscape {
+  display: none;
+}
+
+/* Darkens the photo only where the CTA sits, so the tan type holds up. */
+.splash-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(27, 20, 16, 0.92) 0%,
+    rgba(27, 20, 16, 0.7) 22%,
+    rgba(27, 20, 16, 0) 48%
+  );
+}
+
+/* Title lockup, measured off the label's banner. The origin is the top-left
+   of the "closer" ink; --lx/--ly place it on the stage and --lf sizes it,
+   both as fractions of the covered art. Line and logo offsets are in em so
+   the lockup scales as one piece. The line offsets subtract Rafaella's side
+   bearing and the 0.14em between a line box's top and its cap height. */
+.splash-lockup {
+  /* Portrait sits higher than the label's mobile banner, up in the dark
+     porch ceiling: the clean plate frames Cole tighter, so at the banner's
+     spot the signature ran into the hat brim. Floor it below the notch. */
+  --lx: 0.0654;
+  --ly: 0.085;
+  --lf: 0.1;
+  position: absolute;
+  left: calc(var(--sx) + var(--sw) * var(--lx));
+  top: max(
+    calc(var(--sy) + var(--sh) * var(--ly)),
+    calc(env(safe-area-inset-top) + 1.5rem)
+  );
+  width: 4.9em;
+  height: 2.9em;
+  margin: 0;
+  font-family: "rafaella", Georgia, serif;
+  font-weight: 400;
+  font-size: calc(var(--sw) * var(--lf));
+  line-height: 1;
+  letter-spacing: 0.048em;
+  color: var(--closer-tan);
+}
+.splash-lockup-line {
+  position: absolute;
+  white-space: nowrap;
+}
+.splash-lockup-l1 {
+  left: -0.01em;
+  top: -0.14em;
+}
+.splash-lockup-l2 {
+  left: 0.983em;
+  top: 0.603em;
+}
+.splash-lockup-l3 {
+  left: 0.503em;
+  top: 1.334em;
+}
+.splash-lockup-logo {
+  position: absolute;
+  left: 2.234em;
+  top: 1.508em;
+  width: 2.597em;
+  height: auto;
+}
+
+.splash-cta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  max-width: 26rem;
+  padding: 0 1.5rem max(1.75rem, calc(env(safe-area-inset-bottom) + 1.25rem));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Small label over the date, in the logo's cream (the brand cream) so it
+   ties to the signature rather than the tan title. Tracked the same as the
+   date; the negative right margin cancels the trailing letter-space so it
+   stays optically centered on mobile. */
+.splash-eyebrow {
+  margin: 0 -0.08em 0.7rem 0;
+  font-family: "calluna", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(0.8125rem, 3.4vw, 0.9375rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-cream);
+  /* Same weight trick as the date, a touch heavier at this small size. */
+  -webkit-text-stroke: 0.035em currentColor;
+}
+
+.splash-date {
+  font-family: "calluna", Georgia, serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: var(--closer-tan);
+  font-size: clamp(1.625rem, 7.5vw, 2.25rem);
+  /* Calluna defaults to old-style figures, which drop the 9 below the
+     baseline next to all-caps text. Lining figures sit at cap height. */
+  font-variant-numeric: lining-nums;
+  /* The kit only carries Calluna Regular, so a hairline stroke in the same
+     color adds a touch of weight without faux-bold smearing. Scales with the
+     type. Swap for a real Semibold if one is added to the kit. */
+  -webkit-text-stroke: 0.022em currentColor;
+}
+
+.splash-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  width: 100%;
+  margin-top: 1.25rem;
+}
+
+.splash-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2rem;
+  border: 1px solid var(--closer-tan);
+  border-radius: 2px;
+  font-family: "calluna", Georgia, serif;
+  font-size: 0.9375rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+#splash-overlay .splash-btn-primary {
+  background: var(--closer-tan);
+  color: var(--closer-ink);
+}
+#splash-overlay .splash-btn-primary:hover {
+  opacity: 0.85;
+}
+#splash-overlay .splash-btn-ghost {
+  background: rgba(27, 20, 16, 0.25);
+  color: var(--closer-tan);
+}
+#splash-overlay .splash-btn-ghost:hover {
+  background: var(--closer-tan);
+  color: var(--closer-ink);
+}
+#splash-overlay .splash-btn:focus-visible,
+#splash-overlay .splash-legal a:focus-visible {
+  outline: 2px solid var(--closer-tan);
+  outline-offset: 3px;
+}
+
+.splash-legal {
+  margin-top: 1.25rem;
+  max-width: 24rem;
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--closer-tan);
+}
+#splash-overlay .splash-legal a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+#splash-overlay .splash-legal a:hover {
+  opacity: 0.7;
+}
+
+/* Landscape art: the lockup and CTA stack as one left-aligned column,
+   centered vertically in the viewport. --col is its left edge on the art. The
+   label's banner starts the lockup 12% in; it sits further toward center here
+   so the block reads less edge-bound, while still clearing the hat brim at
+   about 49%. */
+@media (min-aspect-ratio: 5/4) {
+  #splash-overlay {
+    --sw: max(100vw, 177.78dvh);
+    --sh: max(100dvh, 56.25vw);
+    --sx: calc((100vw - var(--sw)) * 0.3);
+    --sy: calc((100dvh - var(--sh)) * 0.3);
+    --col: 0.19;
+  }
+  .splash-art-landscape {
+    display: block;
+  }
+  .splash-art-portrait {
+    display: none;
+  }
+  .splash-scrim {
+    background: radial-gradient(
+      ellipse 55% 75% at 25% 50%,
+      rgba(27, 20, 16, 0.78) 0%,
+      rgba(27, 20, 16, 0.5) 50%,
+      rgba(27, 20, 16, 0) 100%
+    );
+  }
+  .splash-content {
+    position: absolute;
+    left: calc(var(--sx) + var(--sw) * var(--col));
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  /* In the column the lockup is an ordinary block; its box is sized to the
+     ink (4.9em x 2.9em), so the group centers on what you actually see. */
+  .splash-lockup {
+    --lf: 0.05514;
+    position: relative;
+    left: auto;
+    top: auto;
+  }
+  .splash-cta {
+    position: static;
+    margin: clamp(1.5rem, calc(var(--sw) * 0.035), 3.25rem) 0 0;
+    width: clamp(18rem, calc(var(--sw) * 0.3), 30rem);
+    max-width: none;
+    padding: 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .splash-eyebrow {
+    font-size: clamp(0.8125rem, calc(var(--sw) * 0.0085), 1.125rem);
+    margin-bottom: clamp(0.625rem, calc(var(--sw) * 0.0065), 1rem);
+  }
+  .splash-date {
+    font-size: clamp(1.5rem, calc(var(--sw) * 0.021), 2.75rem);
+  }
+  .splash-buttons {
+    flex-direction: row;
+    width: auto;
+    gap: 0.75rem;
+    margin-top: clamp(1rem, calc(var(--sw) * 0.013), 1.75rem);
+  }
+  .splash-legal {
+    margin-top: clamp(1rem, calc(var(--sw) * 0.013), 1.75rem);
+  }
+}
+
+/* Phones held sideways: tighten everything so the card fits the short screen. */
+@media (min-aspect-ratio: 5/4) and (max-height: 520px) {
+  .splash-cta {
+    margin-top: 1rem;
+  }
+  .splash-eyebrow {
+    font-size: 0.6875rem;
+    margin-bottom: 0.5rem;
+  }
+  .splash-date {
+    font-size: 1.25rem;
+  }
+  .splash-btn {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.8125rem;
+  }
+  .splash-buttons,
+  .splash-legal {
+    margin-top: 0.75rem;
+  }
+  .splash-legal {
+    font-size: 10px;
+  }
+}
+
+/* Staggered fade-up. Resting opacity comes from --rise-to so the legal note
+   keeps its dimmed weight. Fast out with a long soft settle. */
+@keyframes splash-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: var(--rise-to, 1);
+    transform: translateY(0);
+  }
+}
+.splash-rise {
+  opacity: 0;
+}
+.splash-ready .splash-rise {
+  animation: splash-rise 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #splash-overlay,
+  .splash-art {
+    transition: none;
+  }
+  .splash-ready .splash-rise {
+    animation: none;
+    opacity: var(--rise-to, 1);
+  }
 }

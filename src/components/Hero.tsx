@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-
-const SESSION_KEY = "colegoodwin_splash_shown";
+import { useSplashEntered } from "./consent/useSplashEntered";
 
 function startAnimation(
   setAnimate: (v: boolean) => void,
@@ -36,14 +35,16 @@ export default function Hero() {
   const pathname = usePathname();
   const [animKey, setAnimKey] = useState(0);
   const [animate, setAnimate] = useState(false);
+  const entered = useSplashEntered();
 
   // On mount or pathname change to home, decide whether to animate now or wait for splash
   useEffect(() => {
     if (pathname !== "/") return;
 
-    // Splash disabled — animate immediately
+    // Hold the reveal until the splash is gone so it doesn't play unseen.
+    if (!entered) return;
     startAnimation(setAnimate, setAnimKey);
-  }, [pathname]);
+  }, [pathname, entered]);
 
   // Cleanup overflow on unmount
   useEffect(() => {

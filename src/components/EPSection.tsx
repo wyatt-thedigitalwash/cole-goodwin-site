@@ -2,30 +2,38 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { CLOSER_EVERY_DAY, closerCopy } from "@/lib/release";
 
-const SONGS = [
-  {
-    title: "Howdy",
-    cover: "/cover-images/ColeGoodwin_Howdy_CoverArt.jpg",
-    url: "https://colegoodwin.lnk.to/howdyWE",
-  },
-  {
-    title: "Girl That\u2019s How",
-    cover: "/cover-images/ColeGoodwin_GirlThatsHow_CoverArt.jpg",
-    url: "#",
-  },
-  {
-    title: "Where She\u2019s Coming From",
-    cover: "/cover-images/ColeGoodwin_WhereShesComingFrom_CoverArt.jpg",
-    url: "https://colegoodwin.ffm.to/whereshescomingfrom",
-  },
-];
+const HOWDY_EP_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
 
 const centeredHeadline: React.CSSProperties = {
   transformOrigin: "center center",
 };
 
-export default function EPSection() {
+// `closerReleased` comes from the server page so the pre-save copy flips on
+// release day without a hydration mismatch. See src/lib/release.ts.
+export default function EPSection({ closerReleased }: { closerReleased: boolean }) {
+  const closer = closerCopy(closerReleased);
+
+  // The new single and the EP, newest first.
+  const releases = [
+    {
+      title: CLOSER_EVERY_DAY.title,
+      cover: CLOSER_EVERY_DAY.cover,
+      alt: `${CLOSER_EVERY_DAY.title} single cover art`,
+      status: closer.dateLine,
+      cta: closer.cta,
+      url: CLOSER_EVERY_DAY.link,
+    },
+    {
+      title: "Howdy EP",
+      cover: "/cover-images/ColeGoodwin_HowdyEP_CoverArt.jpg",
+      alt: "Howdy EP cover art",
+      status: "Out Now",
+      cta: "Listen",
+      url: HOWDY_EP_URL,
+    },
+  ];
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -60,43 +68,50 @@ export default function EPSection() {
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 flex flex-col items-center md:mb-20">
-          <h2 className="ep-anim-heading" style={centeredHeadline}>Latest Releases</h2>
+          <h2 className="ep-anim-heading" style={centeredHeadline}>The Latest</h2>
         </div>
 
-        {/* Songs */}
-        <div className="mx-auto grid max-w-md grid-cols-1 gap-14 md:max-w-none md:grid-cols-3 md:gap-10">
-          {SONGS.map((song, i) => (
-            <div key={song.title} className="flex flex-col items-center">
+        {/* Releases */}
+        <div className="mx-auto grid max-w-md grid-cols-1 gap-14 md:max-w-5xl md:grid-cols-2 md:gap-12 lg:gap-16">
+          {releases.map((release, i) => (
+            <div key={release.title} className="flex flex-col items-center">
               {/* Cover + title */}
               <div className="w-full">
                 <Image
-                  src={song.cover}
-                  alt={`${song.title} cover art`}
-                  width={600}
-                  height={600}
-                  sizes="(max-width: 768px) 85vw, 33vw"
-                  className="ep-anim-cover w-full rounded-lg"
+                  src={release.cover}
+                  alt={release.alt}
+                  width={1000}
+                  height={1000}
+                  sizes="(max-width: 768px) 85vw, 480px"
+                  className="ep-anim-cover aspect-square w-full rounded-lg object-cover"
                   style={{ transitionDelay: `${0.3 + i * 0.15}s` }}
                 />
                 <h3
-                  className="ep-anim-title mt-5 text-center text-xl md:mt-6 md:text-2xl"
+                  className="ep-anim-title mt-6 text-center text-2xl md:mt-8 md:text-3xl"
                   style={{
                     ...centeredHeadline,
                     transitionDelay: `${0.3 + i * 0.15 + 0.15}s`,
                   }}
                 >
-                  {song.title}
+                  {release.title}
                 </h3>
+                <p
+                  className="ep-anim-title mt-2 text-center text-base font-bold uppercase tracking-wide text-cream/60 md:text-lg"
+                  style={{ transitionDelay: `${0.3 + i * 0.15 + 0.2}s` }}
+                >
+                  {release.status}
+                </p>
               </div>
 
-              {/* Listen button */}
+              {/* Listen / pre-save button */}
               <a
-                href={song.url}
-                target={song.url !== "#" ? "_blank" : undefined}
-                rel={song.url !== "#" ? "noopener noreferrer" : undefined}
-                className="btn-listen mt-4"
+                href={release.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-listen mt-5"
               >
-                Listen
+                {release.cta}
+                <span className="sr-only"> {release.title} (opens in new tab)</span>
               </a>
             </div>
           ))}

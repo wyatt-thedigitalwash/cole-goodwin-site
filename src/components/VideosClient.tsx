@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { cleanTitle } from "@/lib/videos";
 import type { VideoEntry } from "@/lib/videos";
 
@@ -119,7 +120,7 @@ export default function VideosClient({ videos }: { videos: VideoEntry[] }) {
         </div>
 
         {/* Strip thumbnails — fills featured width */}
-        <div className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:grid-cols-4">
+        <div className="mt-6 grid grid-cols-3 gap-3 md:mt-8 md:gap-4">
           {videos.map((video, i) => {
             const isActive = i === featuredIdx;
             return (
@@ -160,6 +161,16 @@ export default function VideosClient({ videos }: { videos: VideoEntry[] }) {
               </button>
             );
           })}
+        </div>
+
+        {/* Full catalog lives on /videos */}
+        <div
+          className="videos-anim-strip mt-10 flex justify-center md:mt-14"
+          style={{ transitionDelay: `${0.5 + videos.length * 0.1}s` }}
+        >
+          <Link href="/videos" className="btn-listen px-10 py-3.5 md:text-lg">
+            View All Videos
+          </Link>
         </div>
       </div>
     </section>

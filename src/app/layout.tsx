@@ -3,14 +3,22 @@ import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
-import SplashProvider from "@/components/SplashContext";
-import LayoutShell from "@/components/LayoutShell";
+import Splash from "@/components/Splash";
+import { SPLASH_KEY, isCloserOut } from "@/lib/release";
 import AnchorScroll from "@/components/shared/AnchorScroll";
 import CookieConsent from "@/components/consent/CookieConsent";
 import TermsGate from "@/components/consent/TermsGate";
 import "./globals.css";
 
 const SITE_URL = "https://colegoodwinmusic.com";
+
+// Re-render every route at most hourly so the splash flips from pre-save to
+// "out now" on release day without a deploy. See src/lib/release.ts.
+export const revalidate = 3600;
+
+// Read before paint so a visitor who already entered this session never sees
+// the splash flash, and a deep link to /legal is never gated.
+const splashScript = `try{var e=document.documentElement;if(sessionStorage.getItem('${SPLASH_KEY}')){e.classList.add('splash-entered')}else if(location.pathname.indexOf('/legal')===0){e.classList.add('splash-exempt')}}catch(err){}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -56,10 +64,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    // suppressHydrationWarning: the splash script below mutates the class list
+    // before React hydrates, so server and client markup intentionally differ.
+    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <head>
-          <link rel="stylesheet" href="https://use.typekit.net/iln0apa.css" />
-        </head>
+        <script dangerouslySetInnerHTML={{ __html: splashScript }} />
+        <link rel="stylesheet" href="https://use.typekit.net/iln0apa.css" />
+        {/* Calluna + Rafaella, the label's type for "Closer Every Day". */}
+        <link rel="stylesheet" href="https://use.typekit.net/gjg0aoa.css" />
+      </head>
       <Script id="gtm-init" strategy="afterInteractive">
         {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -68,6 +81,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-57H5TG35');`}
       </Script>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {/* Splash must be the first child of <body> so it exists on first
+            paint. Shown once per browser session; never on /legal routes. */}
+        <Splash released={isCloserOut()} />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-rust focus:px-4 focus:py-2 focus:text-cream focus:shadow-lg"
@@ -113,20 +129,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <SplashProvider>
-          <LayoutShell>
-            <Header />
-            <PageTransition>{children}</PageTransition>
-            <Footer />
-          </LayoutShell>
-          {/* Cookie consent banner. Gated on the splash state so it never
-              stacks on the splash overlay; persisted in localStorage; injects
-              nothing before consent is granted. */}
-          <CookieConsent />
-          {/* Arbitration / class-action notice, shown once right after the
-              cookie decision so it is never buried only in the footer. */}
-          <TermsGate />
-        </SplashProvider>
+        <Header />
+        <PageTransition>{children}</PageTransition>
+        <Footer />
+        {/* Cookie consent banner. Held back until the visitor enters past the
+            splash; persisted in localStorage; injects nothing before consent
+            is granted. */}
+        <CookieConsent />
+        {/* Arbitration / class-action notice, shown once right after the
+            cookie decision so it is never buried only in the footer. */}
+        <TermsGate />
       </body>
     </html>
   );

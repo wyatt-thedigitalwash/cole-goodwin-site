@@ -6,6 +6,7 @@ import AboutSection from "@/components/AboutSection";
 import VideosSection from "@/components/VideosSection";
 import EmailListSection from "@/components/EmailListSection";
 import { getTourEvents } from "@/lib/bandsintown";
+import { isCloserOut } from "@/lib/release";
 
 export default async function Home() {
   const events = await getTourEvents();
@@ -14,7 +15,7 @@ export default async function Home() {
     <main id="main-content" className="flex-1">
       <Hero />
       <VideoBanner />
-      <EPSection />
+      <EPSection closerReleased={isCloserOut()} />
       <TourSection events={events} />
       <VideosSection />
       <AboutSection />

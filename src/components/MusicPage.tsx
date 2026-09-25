@@ -2,12 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { CLOSER_EVERY_DAY, closerCopy } from "@/lib/release";
 
 const centeredHeadline: React.CSSProperties = {
   transformOrigin: "center center",
 };
 
-const LISTEN_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
+const HOWDY_EP_URL = "https://colegoodwin.ffm.to/howdyep.OPR";
 
 const SINGLES = [
   { title: "Girl That\u2019s How", url: "#", cover: "/cover-images/ColeGoodwin_GirlThatsHow_CoverArt.jpg" },
@@ -25,7 +26,29 @@ const PLATFORMS = [
   { label: "Pandora", url: "https://pandora.app.link/EMGZOrlQEUb" },
 ];
 
-export default function MusicPage() {
+export default function MusicPage({ closerReleased }: { closerReleased: boolean }) {
+  const closer = closerCopy(closerReleased);
+
+  // Newest first. Each card: square cover, title, status line, button.
+  const releases = [
+    {
+      title: CLOSER_EVERY_DAY.title,
+      kind: "Single",
+      cover: CLOSER_EVERY_DAY.cover,
+      status: closer.dateLine,
+      cta: closer.cta,
+      url: CLOSER_EVERY_DAY.link,
+    },
+    {
+      title: "Howdy",
+      kind: "EP",
+      cover: "/cover-images/ColeGoodwin_HowdyEP_CoverArt.jpg",
+      status: "Out Now",
+      cta: "Listen Now",
+      url: HOWDY_EP_URL,
+    },
+  ];
+
   const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,44 +78,43 @@ export default function MusicPage() {
 
   return (
     <main id="main-content" ref={pageRef} className="flex-1 bg-brown">
-      {/* Section 1: EP Hero — two-column showcase, fills the viewport */}
-      <section className="music-section music-section-hidden flex min-h-screen items-center px-5 py-16 md:px-12 md:py-24 lg:px-20">
-        <div className="mx-auto w-full max-w-5xl md:max-w-7xl">
-          <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16 lg:gap-24">
-            {/* Left — EP cover, large */}
-            <div className="w-full shrink-0 md:w-[45%]">
-              <Image
-                src="/cover-images/ColeGoodwin_HowdyEP_CoverArt.jpg"
-                alt="Howdy EP cover art"
-                width={800}
-                height={800}
-                sizes="(max-width: 768px) 100vw, 45vw"
-                className="w-full rounded-xl shadow-[10px_10px_0_rgba(0,0,0,0.3)]"
-              />
-            </div>
-
-            {/* Right — EP info + track strip */}
-            <div className="flex w-full flex-1 flex-col items-center md:items-start">
-              <h1
-                className="text-center text-5xl ![transform-origin:center_center] md:text-left md:text-6xl md:![transform-origin:left_center] lg:text-7xl"
-              >
-                Howdy EP
-              </h1>
-              <p className="mt-3 text-base uppercase tracking-[0.2em] text-cream/60 md:mt-4 md:text-lg">
-                Out Now
-              </p>
-
-              {/* Listen button */}
-              <a
-                href={LISTEN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-listen mt-8 px-12 py-4 text-lg md:mt-10 md:px-14 md:py-5 md:text-xl"
-              >
-                Listen to Howdy EP
-              </a>
-
-            </div>
+      {/* Section 1: Latest releases -- two large covers side by side */}
+      <section className="music-section music-section-hidden flex min-h-screen items-center px-5 pb-16 pt-28 md:px-12 md:pb-24 md:pt-32 lg:px-20">
+        <div className="mx-auto w-full max-w-5xl">
+          <h1 className="sr-only">Music</h1>
+          <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-12 lg:gap-16">
+            {releases.map((release) => (
+              <article key={release.title} className="flex flex-col items-center text-center">
+                <div className="w-full">
+                  <Image
+                    src={release.cover}
+                    alt={`${release.title} ${release.kind === "EP" ? "EP" : "single"} cover art`}
+                    width={1000}
+                    height={1000}
+                    sizes="(max-width: 768px) 100vw, 480px"
+                    priority
+                    className="aspect-square w-full rounded-xl object-cover shadow-[10px_10px_0_rgba(0,0,0,0.3)]"
+                  />
+                </div>
+                <h2
+                  className="mt-8 text-4xl ![transform-origin:center_center] md:mt-10 md:text-5xl"
+                >
+                  {release.kind === "EP" ? `${release.title} EP` : release.title}
+                </h2>
+                <p className="mt-3 text-base font-bold uppercase tracking-wide text-cream/60 md:text-lg">
+                  {release.status}
+                </p>
+                <a
+                  href={release.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-listen mt-6 px-12 py-4 text-lg md:mt-8"
+                >
+                  {release.cta}
+                  <span className="sr-only"> {release.title} (opens in new tab)</span>
+                </a>
+              </article>
+            ))}
           </div>
         </div>
       </section>
