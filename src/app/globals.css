@@ -1166,30 +1166,13 @@ html:not(.splash-entered):not(.splash-exempt) body {
   text-align: center;
 }
 
-/* Small label over the date, in the logo's cream (the brand cream) so it
-   ties to the signature rather than the tan title. Tracked the same as the
-   date; the negative right margin cancels the trailing letter-space so it
-   stays optically centered on mobile. */
-.splash-eyebrow {
-  margin: 0 -0.08em 0.7rem 0;
-  font-family: "calluna", Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(0.8125rem, 3.4vw, 0.9375rem);
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-cream);
-  /* Same weight trick as the date, a touch heavier at this small size. */
-  -webkit-text-stroke: 0.035em currentColor;
-}
-
 .splash-date {
   font-family: "calluna", Georgia, serif;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   line-height: 1;
-  color: var(--closer-tan);
+  color: #fff;
   font-size: clamp(1.625rem, 7.5vw, 2.25rem);
   /* Calluna defaults to old-style figures, which drop the 9 below the
      baseline next to all-caps text. Lining figures sit at cap height. */
@@ -1315,10 +1298,6 @@ html:not(.splash-entered):not(.splash-exempt) body {
     align-items: flex-start;
     text-align: left;
   }
-  .splash-eyebrow {
-    font-size: clamp(0.8125rem, calc(var(--sw) * 0.0085), 1.125rem);
-    margin-bottom: clamp(0.625rem, calc(var(--sw) * 0.0065), 1rem);
-  }
   .splash-date {
     font-size: clamp(1.5rem, calc(var(--sw) * 0.021), 2.75rem);
   }
@@ -1337,10 +1316,6 @@ html:not(.splash-entered):not(.splash-exempt) body {
 @media (min-aspect-ratio: 5/4) and (max-height: 520px) {
   .splash-cta {
     margin-top: 1rem;
-  }
-  .splash-eyebrow {
-    font-size: 0.6875rem;
-    margin-bottom: 0.5rem;
   }
   .splash-date {
     font-size: 1.25rem;

@@ -128,9 +128,6 @@ export default function Splash({ released }: { released: boolean }) {
         </p>
 
         <div className="splash-cta">
-          <p className="splash-rise splash-eyebrow" style={{ animationDelay: "300ms" }}>
-            New Single
-          </p>
           <p className="splash-rise splash-date" style={{ animationDelay: "380ms" }}>
             {copy.dateLine}
           </p>
