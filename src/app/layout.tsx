@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
@@ -8,6 +7,7 @@ import { SPLASH_KEY, isCloserOut } from "@/lib/release";
 import AnchorScroll from "@/components/shared/AnchorScroll";
 import CookieConsent from "@/components/consent/CookieConsent";
 import TermsGate from "@/components/consent/TermsGate";
+import RouteTracker from "@/components/consent/RouteTracker";
 import "./globals.css";
 
 const SITE_URL = "https://colegoodwinmusic.com";
@@ -73,13 +73,6 @@ export default function RootLayout({
         {/* Calluna + Rafaella, the label's type for "Closer Every Day". */}
         <link rel="stylesheet" href="https://use.typekit.net/gjg0aoa.css" />
       </head>
-      <Script id="gtm-init" strategy="afterInteractive">
-        {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-57H5TG35');`}
-      </Script>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {/* Splash must be the first child of <body> so it exists on first
             paint. Shown once per browser session; never on /legal routes. */}
@@ -91,6 +84,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           Skip to main content
         </a>
         <AnchorScroll />
+        {/* The label GTM container (GTM-57H5TG35) is NOT loaded here. It is
+            injected only after the visitor consents -- see
+            components/consent/injectScripts.ts. */}
+        <RouteTracker />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -120,15 +117,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }),
           }}
         />
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-57H5TG35"
-            title="Google Tag Manager"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
         <Header />
         <PageTransition>{children}</PageTransition>
         <Footer />
